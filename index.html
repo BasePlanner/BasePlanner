@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
 <title>Wardogs Base Planner</title>
 <meta name="description" content="Plan your Wardogs base in 3D. Draw. Build. Defend. Place your F.O.B., stack Hesco walls, count supplies and share a 5-letter code.">
 <meta property="og:title" content="Wardogs Base Planner">
@@ -16,7 +16,8 @@
 :root[data-theme="green"]{--bg:#050905;--paper:#080f08;--ink:#a6f0a6;--muted:#68c468;--panel:#0b140b;--acc:#3ddc5a;--acctxt:#050905;--border:#1f6a2c;--head:#3ddc5a}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-html,body{height:100%;margin:0}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow-x:hidden}
 body{background:var(--bg);color:var(--ink);font-family:"Courier New",Courier,monospace;display:flex;flex-direction:column}
 header{padding:8px 12px;border-bottom:2px solid var(--border);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
 h1{margin:0;font-size:18px;letter-spacing:2px;color:var(--head)}header span{font-size:12px;color:var(--muted)}

@@ -43,7 +43,12 @@ button.on small{color:var(--acctxt)!important}
 #pal button,#edPal button{text-align:left}#pal small,#edPal small{display:block;color:var(--muted)}
 #c{flex:1;min-width:0;border:2px solid var(--border);background:var(--paper);position:relative}
 canvas{display:block;width:100%;height:100%}
-#sh{padding:0 10px 8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+#shareBox{flex:0 0 auto;border:1.5px solid var(--border);background:var(--paper);font-size:11px}
+#shHead{width:100%;border:0;text-align:left;font-weight:bold;letter-spacing:1px;background:var(--panel);padding:6px 8px}
+#shBody{padding:6px 7px;display:flex;flex-direction:column;gap:6px;border-top:1.5px solid var(--border)}
+#shBody input,#shBody textarea{width:100%;min-width:0}#shBody textarea{height:48px;flex:none}
+.shRow{display:flex;gap:6px}.shRow button{flex:1 1 0;min-width:0;padding:6px 4px}
+#msg{font-size:11px;min-height:1.2em;word-break:break-word}
 textarea{flex:1;min-width:180px;height:34px;font:11px "Courier New",monospace;background:var(--paper);color:var(--ink);border:1.5px solid var(--border)}
 input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);border:1.5px solid var(--border);padding:6px 8px;min-width:150px}
 #supBtn{flex:0 0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;font-weight:bold;letter-spacing:1px;padding:8px}
@@ -78,8 +83,10 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 @supports(height:100dvh){html,body{height:100dvh}}
 *{-webkit-tap-highlight-color:transparent}
 button{touch-action:manipulation}
-#c,#c canvas,#pal,#edPal,#tools{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
-#tools{display:contents}#bShare{display:none}
+#c,#c canvas{touch-action:none}
+#pal,#edPal,#tools{touch-action:pan-x pan-y}
+#c,#c canvas,#pal,#edPal,#tools{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#tools{display:contents}
 #camPad{position:absolute;right:8px;bottom:8px;z-index:5;display:none;gap:6px;flex-wrap:wrap;width:136px;justify-content:flex-end}
 #camPad button{width:40px;height:40px;padding:0;font-size:15px;opacity:.9;touch-action:none}
 @media (pointer:coarse){#camPad{display:flex}#tools button,#edRow button{min-height:38px}}
@@ -88,7 +95,7 @@ button{touch-action:manipulation}
 header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag,#themeLbl{display:none}
 #bar{flex-direction:column;align-items:stretch;gap:4px;padding:6px 10px}
 #tools{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}#tools button,#tools select{flex:0 0 auto;min-height:40px}
-#bShare{display:inline-block}#sh{display:none}#sh.open{display:flex}
+
 #main{flex-direction:column;gap:6px;padding:0 8px 6px}
 #c{order:1;flex:1 1 auto;min-height:200px}#side{order:2;width:100%;flex:0 0 auto}
 #pal,#edPal{flex:0 0 auto;min-height:0;width:100%;flex-direction:row;flex-wrap:nowrap;max-height:none}
@@ -98,10 +105,11 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 @media (max-height:520px){header{padding:3px 10px}#bar{padding:3px 10px}}
 </style></head><body>
 <header><h1>BASE PLANNER 3D</h1><span class="tag">Draw. Build. Defend.</span><span id="who" style="margin-left:auto;font-size:12px;color:var(--muted)"></span><button id="bMenu" style="margin-left:10px">Menu</button><label id="themeLbl" for="themeSel" style="margin-left:10px;font-size:12px;letter-spacing:1px;color:var(--muted)">THEMES</label><select id="themeSel"></select></header>
-<div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button><select id="defSel"></select><button id="bDef">Edit default build</button><button id="bShare">Save / Share</button></div><span id="st"></span></div>
+<div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bCopy" type="button">Copy</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button><select id="defSel"></select><button id="bDef">Edit default build</button></div><span id="st"></span></div>
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
-<div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
-<div id="sh"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><button id="bSave">Save blueprint</button><button id="bLink">Get share code</button><button id="bLoad">Load code/link</button><textarea id="box" placeholder="Share link or code. Paste one here and press Load."></textarea><span id="msg" style="font-size:12px"></span></div>
+<div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button>
+<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
+
 <footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="supPanel" role="dialog" aria-modal="true" aria-labelledby="supTitle" hidden><div id="supCard"><div class="k">SUPPLY COSTS</div><h2 id="supTitle">BREAKDOWN</h2><div id="supList"></div><button id="supClose" type="button">Close</button></div></div>
 <div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle" hidden>
@@ -140,7 +148,7 @@ repair:{n:"Vehicle repair station",w:2,h:2,y:1.5,c:0xb03a3a},tent:{n:"Recon tent
 const COST={hb1:15,hbt:22,hwall:75,bremer:15,hedge:22,gate:85,wire:7,bunker:100,shelter:100,tower:100,loud:100,radio:20,mortar:150,sam:1000,ciws:1500,sting:150,oil:2250,refuel:200,repair:200,tent:7,door:22,sandbag:15,fob:0};
 const subTxt=k=>T[k].w+"\u00D7"+T[k].h+(COST[k]?" \u00B7 "+COST[k]+" supplies":"");
 const ORDER=["fob","hb1","hbt","hwall","bremer","hedge","gate","wire","bunker","shelter","tower","loud","radio","mortar","sam","ciws","sting","oil","refuel","repair","tent","door"];
-let items=[],sel=new Set(),tool=null,trot=0,half=false,lvl=1,nid=1,hist=[],hover=null,plan=true,down=null,free=false,gmode=0,armDel=false,lastSig="",badMsg="",autoDirty=false;
+let items=[],sel=new Set(),tool=null,trot=0,half=false,lvl=1,nid=1,hist=[],hover=null,plan=true,down=null,free=false,gmode=0,armDel=false,lastSig="",badMsg="",autoDirty=false,clip=null,clipSeq=0;
 const dims=(t,r)=>r%2?[T[t].h,T[t].w]:[T[t].w,T[t].h],clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),step=()=>half?.5:1,q=v=>free?v:Math.round(v/step())*step();
 const push=()=>{autoDirty=true;hist.push(items.map(i=>({...i})));if(hist.length>100)hist.shift()};
 const THEMES={
@@ -1053,6 +1061,10 @@ sel=e0.mode==="item"?new Set([it.id]):new Set();rebuild()}
 $("edDone").onclick=edDone;$("edErase").onclick=()=>{if(!ed)return;ed.erase=!ed.erase;$("edErase").className=ed.erase?"on":""};$("edLm").onclick=()=>edLevel(-1);$("edLp").onclick=()=>edLevel(1);
 $("edClear").onclick=()=>{if(!ed)return;ed.hist.push(edSnap());ed.parts=[];afterEdit()};
 $("edReset").onclick=()=>{if(!ed)return;ed.hist.push(edSnap());ed.parts=((ed.mode==="default"?BAKED:DEF)[ed.t]||[]).map(p=>({...p}));afterEdit()};
+function copySel(){if(ed||sel.size!==1)return;const it=items.find(i=>sel.has(i.id));if(!it||it.t==="fob")return;
+const parts=Array.isArray(it.parts)?it.parts.map(p=>({...p})):undefined,[iw,ih]=dims(it.t,it.r);setTool(it.t);clip={t:it.t,parts,id:++clipSeq};trot=it.r;
+hover=[it.x+iw+1+iw/2,it.y+ih/2];updGhost();ui()}
+$("bCopy").onclick=copySel;
 $("bParts").onclick=()=>{const it=sel.size===1&&items.find(i=>sel.has(i.id));if(it&&T[it.t].ed)openEd("item",it.id)};
 $("bDef").onclick=()=>openEd("default",null,$("defSel").value);
 const PAINT=new Set(["hb1","hbt","hwall","bremer"]);let stroke=null,rstroke=null,ghostKey="",pan=null;const keys={};
@@ -1121,7 +1133,7 @@ ctl.target.set(cx,0,cz);cam.position.copy(ctl.target).addScaledVector(dir,S*3.0)
 function frameAuto(){if(ed)return;const F=fobs();if(!F.length){frameTo(GW/2,GH/2,20);return}
 let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;F.forEach(f=>{const c=zc(f);x0=Math.min(x0,c[0]-R);x1=Math.max(x1,c[0]+R);z0=Math.min(z0,c[1]-R);z1=Math.max(z1,c[1]+R)});
 const S=Math.max(x1-x0,z1-z0)/2*1.05+(mapModeNow()?45:0);frameTo((x0+x1)/2,(z0+z1)/2,S)}
-function setTool(t){const before=mapModeNow();tool=t;sel=new Set();updGhost();if(before!==mapModeNow()){drawZones();frameAuto()}rebuild()}
+function setTool(t){const before=mapModeNow();tool=t;clip=null;sel=new Set();updGhost();if(before!==mapModeNow()){drawZones();frameAuto()}rebuild()}
 function applyTheme(k){if(!THEMES[k])return;themeKey=k;TH=THEMES[k];document.documentElement.setAttribute("data-theme",k);try{localStorage.setItem("wd_theme",k)}catch(e){}
 scene.background=new THREE.Color(hx(TH.sb));ground.material.color.setHex(hx(TH.gr));mapLines.forEach(l=>l.material.color.setHex(hx(TH[l.userData.k])));hemi.intensity=TH.lh;sun.intensity=TH.ld;
 drawZones();if(ed)edBuild();updGhost();$("themeSel").value=k}
@@ -1131,21 +1143,27 @@ HELP_E='<h4>PART EDITOR</h4><div><b>Left click</b> place the selected part. Clic
 const TOUCH=!!(window.matchMedia&&matchMedia("(pointer:coarse)").matches);
 const HELP_T='<h4>TOUCH</h4><div><b>Tap</b> place or select</div><div><b>Drag</b> move the view (paints a row for H-blocks and Bremer walls)</div><div><b>Two fingers</b> twist to turn the map, drag up or down to tilt, pinch to zoom</div><div><b>Arrow buttons</b> on the map turn and tilt the view</div><div><b>Select mode</b> then <b>Delete</b> removes an item</div><div><b>Rotate (R)</b> turns what you place or select</div><h4>TIPS</h4><div>Place the F.O.B. first, then build around it. Tap F.O.B. in the list again to claim more ground.</div><div>Tap an H-block, door or building while placing to stack on it. 4 tall H-blocks is the limit.</div><div>Select a bunker, shelter or recon tower and tap Edit parts.</div>',
 HELP_ET='<h4>PART EDITOR</h4><div><b>Tap</b> place the selected part. Tap the top of a part to stack on it, its side to place next to it.</div><div><b>Drag</b> paint 1x1 parts</div><div><b>Erase</b> button, then tap or drag over parts</div><div><b>Rotate (R)</b> turns the part, <b>Level</b> buttons change the level</div><div><b>Undo</b> steps back, <b>Done</b> finishes</div>';
+let shOpen=innerWidth>640;
+function renderSh(){$("shHead").textContent="SAVE & SHARE "+(shOpen?"\u25BE":"\u25B8");$("shBody").hidden=!shOpen}
+$("shHead").onclick=()=>{shOpen=!shOpen;renderSh()};renderSh();
 let helpOpen=innerWidth>640,helpKey="";
 function renderHelp(){$("hHead").textContent=(ed?"PART EDITOR ":"CONTROLS ")+(helpOpen?"\u25BE":"\u25B8");$("hBody").hidden=!helpOpen;$("hBody").innerHTML=ed?(TOUCH?HELP_ET:HELP_E):(TOUCH?HELP_T:HELP_N)}
 $("hHead").onclick=()=>{helpOpen=!helpOpen;renderHelp()};
 function ui(){const hk=ed?"e":"n";if(hk!==helpKey){helpKey=hk;renderHelp()}$("bSel").className=tool?"":"on";$("bHalf").textContent=["Grid","Half-Grid","Free Place"][gmode];$("bHalf").className=gmode?"on":"";
 document.querySelectorAll("#pal button").forEach(b=>{b.disabled=!fobs().length&&b.dataset.t!=="fob";b.className=b.dataset.t===tool?"on":""});
 const one=sel.size===1?items.find(i=>sel.has(i.id)):null;
-$("bParts").disabled=!!ed||!(one&&T[one.t].ed);$("bDef").disabled=!!ed;$("defSel").disabled=!!ed;
-$("st").textContent=ed?"Editing "+T[ed.t].n+(ed.mode==="default"?" · default build":" parts")+" · level "+(ed.z+1)+" · rotation "+"NESW"[ed.rot]:!fobs().length?"Place your F.O.B.":(free?"Free place ON · ":half?"Half-grid ON · ":"")+(tool?"Placing: "+T[tool].n+" · rotation "+"NESW"[trot]:one?"Selected: "+T[one.t].n+" · "+"NESW"[one.r]:sel.size?sel.size+" selected":"");
+$("bParts").disabled=!!ed||!(one&&T[one.t].ed);$("bCopy").disabled=!!ed||!(one&&one.t!=="fob");$("bDef").disabled=!!ed;$("defSel").disabled=!!ed;
+$("st").textContent=ed?"Editing "+T[ed.t].n+(ed.mode==="default"?" · default build":" parts")+" · level "+(ed.z+1):!fobs().length?"Place your F.O.B.":(free?"Free place ON · ":half?"Half-grid ON · ":"")+(tool?"Placing: "+T[tool].n+(clip?" (copy)":""):one?"Selected: "+T[one.t].n:sel.size?sel.size+" selected":"");
 }
 ORDER.forEach(k=>{const b=document.createElement("button");b.dataset.t=k;b.innerHTML=T[k].n+"<small>"+subTxt(k)+"</small>";b.onclick=()=>setTool(tool===k?null:k);$("pal").appendChild(b)});
 function snap(t,r,wx,wz){const [w,h]=dims(t,r);return free?[clamp(wx-w/2,0,GW-w),clamp(wz-h/2,0,GH-h)]:[clamp(q(wx-w/2),0,Math.floor((GW-w)/step())*step()),clamp(q(wz-h/2),0,Math.floor((GH-h)/step())*step())]}
 let ghostPlate=null;
-function updGhost(){const key=tool?tool+"|"+trot+"|"+lvl:"";
+function copyOrModel(){if(!(clip&&clip.t===tool&&T[tool].ed)){const tp=getTpl(tool).clone(true);tp.rotation.y=yawOf(tool,trot);return tp}
+const g=new THREE.Group(),[w,h]=dims(tool,trot),fake={t:tool,x:-w/2,y:-h/2,r:trot,l:1},sh=getTpl(tool+"Shell").clone(true);sh.rotation.y=yawOf(tool,trot);g.add(sh);
+(clip.parts||DEF[tool]||[]).forEach(p=>{const o=getTpl(partKind(p)).clone(true);o.applyMatrix4(partMat(fake,p));g.add(o)});return g}
+function updGhost(){const key=tool?tool+"|"+trot+"|"+lvl+"|"+(clip?clip.id:0):"";
 if(key!==ghostKey){ghostKey=key;if(ghost){scene.remove(ghost);ghost=null}
-if(key){const g=new THREE.Group(),tp=getTpl(tool).clone(true);tp.rotation.y=yawOf(tool,trot);g.add(tp);const [w,h]=dims(tool,trot),fp=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:hx(TH.ac),transparent:true,opacity:0.35,side:THREE.DoubleSide}));fp.rotation.x=-Math.PI/2;fp.position.y=0.03;g.add(fp);ghostPlate=fp;
+if(key){const g=new THREE.Group(),tp=copyOrModel();g.add(tp);const [w,h]=dims(tool,trot),fp=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({color:hx(TH.ac),transparent:true,opacity:0.35,side:THREE.DoubleSide}));fp.rotation.x=-Math.PI/2;fp.position.y=0.03;g.add(fp);ghostPlate=fp;
 if(tool==="fob"){const rg=new THREE.Mesh((()=>{const q=new THREE.RingGeometry((R-0.4)*Math.SQRT2,R*Math.SQRT2,4);q.rotateZ(Math.PI/4);return q})(),new THREE.MeshBasicMaterial({color:hx(TH.ac),transparent:true,opacity:0.7,side:THREE.DoubleSide}));rg.rotation.x=-Math.PI/2;rg.position.y=0.06;g.add(rg);fp.userData.ring=rg}
 ghost=g;scene.add(g)}}
 badMsg="";
@@ -1159,7 +1177,7 @@ function gpt(e){ray.setFromCamera(ptr(e),cam);pl.constant=0;const v=new THREE.Ve
 function groundHit(e,yb){ray.setFromCamera(ptr(e),cam);
 if(yb===undefined&&tool&&tool!=="fob"){const hs=ray.intersectObjects(grp.children,false).filter(h=>h.object.userData.plate);if(hs.length)return hs[0].point.clone()}
 pl.constant=-(yb||0);const v=new THREE.Vector3();return ray.ray.intersectPlane(pl,v)?v:null}
-function place(t,x,y,r){const st=t==="fob"?{l:1}:stackAt(t,x,y,r),it={id:nid++,t,x,y,r,l:st.l};items.push(it);return it}
+function place(t,x,y,r){const st=t==="fob"?{l:1}:stackAt(t,x,y,r),it={id:nid++,t,x,y,r,l:st.l};if(clip&&clip.t===t&&clip.parts)it.parts=clip.parts.map(p=>({...p}));items.push(it);return it}
 function strokeStep(v){const s=stroke,[w,h]=dims(tool,trot),[cx,cy]=snap(tool,trot,v.x,v.z);
 if(!s.axis){const dx=cx-s.x0,dz=cy-s.y0;if(Math.max(Math.abs(dx),Math.abs(dz))<0.6)return;s.axis=Math.abs(dx)>=Math.abs(dz)?"x":"z"}
 const size=s.axis==="x"?w:h,d=s.axis==="x"?cx-s.x0:cy-s.y0,K=Math.round(d/size);let any=false;
@@ -1197,7 +1215,7 @@ function undo(){const s=hist.pop();if(!s)return;autoDirty=true;items=s;sel=new S
 $("bRot").onclick=rot;$("bDel").onclick=del;$("bUndo").onclick=()=>ed?edUndo():undo();$("bSel").onclick=()=>setTool(null);
 $("bHalf").onclick=()=>{gmode=(gmode+1)%3;half=gmode===1;free=gmode===2;updGhost();ui()};
 $("bView").onclick=()=>setView(!plan);
-addEventListener("keydown",e=>{if(supOpen){if(e.key==="Escape")supHide();return}if(wOpen){if(e.key==="Escape"&&!$("wBack").hidden)wHide();return}if(/^(TEXTAREA|INPUT|SELECT)$/.test(e.target.tagName))return;const kk=e.key.toLowerCase();if(kk.length===1&&"wasdqe".includes(kk)&&!e.ctrlKey&&!e.metaKey){keys[kk]=true;return}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();ed?edUndo():undo()}else if(e.key==="r"||e.key==="R")rot();else if(e.key==="Delete"||e.key==="Backspace")del();else if(e.key==="Escape"){ed?edDone():setTool(null)}else if(ed&&(e.key==="["||e.key==="]"))edLevel(e.key==="]"?1:-1)});
+addEventListener("keydown",e=>{if(supOpen){if(e.key==="Escape")supHide();return}if(wOpen){if(e.key==="Escape"&&!$("wBack").hidden)wHide();return}if(/^(TEXTAREA|INPUT|SELECT)$/.test(e.target.tagName))return;const kk=e.key.toLowerCase();if(kk.length===1&&"wasdqe".includes(kk)&&!e.ctrlKey&&!e.metaKey){keys[kk]=true;return}if((e.ctrlKey||e.metaKey)&&kk==="c"){if(!ed&&sel.size===1){e.preventDefault();copySel()}}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();ed?edUndo():undo()}else if(e.key==="r"||e.key==="R")rot();else if(e.key==="Delete"||e.key==="Backspace")del();else if(e.key==="Escape"){ed?edDone():setTool(null)}else if(ed&&(e.key==="["||e.key==="]"))edLevel(e.key==="]"?1:-1)});
 addEventListener("keyup",e=>{keys[e.key.toLowerCase()]=false});addEventListener("blur",()=>{for(const k in keys)keys[k]=false});
 let lastT=performance.now();
 function moveCam(){const now=performance.now(),dt=Math.min(0.05,(now-lastT)/1000);lastT=now;if(g2&&g2.dirty){g2.dirty=false;procG2()}const f=(keys.w?1:0)-(keys.s?1:0),r=(keys.d?1:0)-(keys.a?1:0),sp=(keys.e?1:0)-(keys.q?1:0);
@@ -1211,7 +1229,7 @@ const dist=cam.position.distanceTo(ctl.target),mv=dir.multiplyScalar(f).add(righ
 {const hold=(id,fn)=>{const b=$(id),on=e=>{e.preventDefault();e.stopPropagation();fn(true)},off=()=>fn(false);b.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>b.addEventListener(ev,off))};
 hold("cpL",v=>{keys.q=v});hold("cpR",v=>{keys.e=v});hold("cpU",v=>{if(v&&plan)setView(false);keys.tu=v});hold("cpD",v=>{if(v&&plan)setView(false);keys.td=v});
 const zoomBy=f=>{const o=new THREE.Vector3().subVectors(cam.position,ctl.target);o.setLength(clamp(o.length()*f,ctl.minDistance,ctl.maxDistance));cam.position.copy(ctl.target).add(o)};
-$("cpIn").onclick=()=>zoomBy(0.8);$("cpOut").onclick=()=>zoomBy(1.25);$("bShare").onclick=()=>$("sh").classList.toggle("open")}
+$("cpIn").onclick=()=>zoomBy(0.8);$("cpOut").onclick=()=>zoomBy(1.25)}
 /* two fingers: twist = turn the map around the point between the fingers, drag up/down = tilt, pinch = zoom.
    Each one has its own small dead zone (6 degrees, 10 px, 12 px) so none of them triggers the others by accident. */
 let g2=null,paintT=0,procG2=null;const tp=new Map();

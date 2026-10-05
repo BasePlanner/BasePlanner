@@ -56,6 +56,9 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #supList th:first-child,#supList td:first-child{text-align:left}#supList td{text-align:right;padding:3px 4px;border-bottom:1px solid var(--border)}
 #supList .sub td{font-weight:bold;border-bottom:0}#supList .grand{display:flex;justify-content:space-between;font-size:15px;font-weight:bold;color:var(--head);border-top:2px solid var(--border);padding-top:8px}
 #supList h4{margin:6px 0 4px;font-size:11px;letter-spacing:2px;color:var(--acc)}
+#foot{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:2px 14px;padding:4px 12px 6px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+#foot a,#wCard a{color:var(--acc)}
+.wfoot{margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted)}
 #welcome{position:fixed;left:0;right:0;bottom:0;top:var(--hdr,48px);z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
 #welcome::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:28px 28px;opacity:.14;pointer-events:none}
 #wCard{position:relative;width:100%;max-width:520px;border:2px solid var(--border);background:var(--paper);padding:22px 24px;margin:auto}
@@ -81,6 +84,7 @@ button{touch-action:manipulation}
 #camPad button{width:40px;height:40px;padding:0;font-size:15px;opacity:.9;touch-action:none}
 @media (pointer:coarse){#camPad{display:flex}#tools button,#edRow button{min-height:38px}}
 @media (max-width:640px){
+#foot{font-size:10px;padding:3px 10px 5px}
 header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag,#themeLbl{display:none}
 #bar{flex-direction:column;align-items:stretch;gap:4px;padding:6px 10px}
 #tools{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}#tools button,#tools select{flex:0 0 auto;min-height:40px}
@@ -98,6 +102,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 <div id="sh"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><button id="bSave">Save blueprint</button><button id="bLink">Get share code</button><button id="bLoad">Load code/link</button><textarea id="box" placeholder="Share link or code. Paste one here and press Load."></textarea><span id="msg" style="font-size:12px"></span></div>
+<footer id="foot"><span>Unofficial fan project, not affiliated with the makers of Wardogs.</span><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="supPanel" role="dialog" aria-modal="true" aria-labelledby="supTitle" hidden><div id="supCard"><div class="k">SUPPLY COSTS</div><h2 id="supTitle">BREAKDOWN</h2><div id="supList"></div><button id="supClose" type="button">Close</button></div></div>
 <div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle" hidden>
 <div id="wCard">
@@ -109,6 +114,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <button class="wBtn" id="wBrowse" disabled>INTEL BOARD<small>Browse blueprints from other builders. Coming soon.</small></button>
 <button class="wBtn" id="wLogin" disabled><span id="wLoginT">LOGIN / REGISTER</span><small id="wLoginS">Save blueprints online and post to the Intel Board. Coming soon.</small></button>
 <div id="wAuthMsg" style="font-size:12px;color:var(--muted);margin:0 0 8px"></div>
+<div class="wfoot">Unofficial fan project, not affiliated with the makers of Wardogs.<br><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Join the Discord</a> to report bugs or share ideas.</div>
 <button class="wBtn" id="wBack" hidden style="text-align:center;font-size:12px">BACK TO THE PLANNER</button>
 </div>
 <div id="wLoad" hidden>

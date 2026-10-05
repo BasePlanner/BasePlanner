@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Wardogs Base Planner</title>
-<meta name="description" content="Plan your Wardogs base in 3D. Draw it. Build it. Defend it. Place your F.O.B., stack Hesco walls, count supplies and share a 5-letter code.">
+<meta name="description" content="Plan your Wardogs base in 3D. Draw. Build. Defend. Place your F.O.B., stack Hesco walls, count supplies and share a 5-letter code.">
 <meta property="og:title" content="Wardogs Base Planner">
 <meta property="og:description" content="Plan your Wardogs base in 3D, count the supplies and share it with a 5-letter code.">
 <meta property="og:type" content="website">
@@ -97,7 +97,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button><select id="defSel"></select><button id="bDef">Edit default build</button><button id="bShare">Save / Share</button></div><span id="st"></span></div>
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
-<div id="sh"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><button id="bSave">Save blueprint</button><button id="bLink">Get share link</button><button id="bLoad">Load code/link</button><textarea id="box" placeholder="Share link or code. Paste one here and press Load."></textarea><span id="msg" style="font-size:12px"></span></div>
+<div id="sh"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><button id="bSave">Save blueprint</button><button id="bLink">Get share code</button><button id="bLoad">Load code/link</button><textarea id="box" placeholder="Share link or code. Paste one here and press Load."></textarea><span id="msg" style="font-size:12px"></span></div>
 <div id="supPanel" role="dialog" aria-modal="true" aria-labelledby="supTitle" hidden><div id="supCard"><div class="k">SUPPLY COSTS</div><h2 id="supTitle">BREAKDOWN</h2><div id="supList"></div><button id="supClose" type="button">Close</button></div></div>
 <div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle" hidden>
 <div id="wCard">
@@ -1278,10 +1278,10 @@ $("wLogin").onclick=async()=>{const m=$("wAuthMsg");m.textContent="";try{if(auth
 async function loadAny(c){try{c=String(c).trim();if(c.includes("#"))c=c.split("#").pop();c=c.trim();
 if(c.length===5&&!/^w2/i.test(c)&&CODE_RE.test(c.toUpperCase())){if(!cloudOn())return false;const d=await cloudGet(c.toUpperCase());return d?await loadAny(d):false}
 if(c.startsWith("w2")){const u=unb64u(c.slice(2));let body=u.subarray(1);if(u[0]&1)body=await pipeBytes(body,new DecompressionStream("deflate-raw"));return loadItems(unpackItems(body))}return load(c)}catch(e){return false}}
-$("bLink").onclick=async()=>{const long=await shareCode();let c=long,short=false;
-if(cloudOn()){try{c=await cloudPut(long);short=true}catch(e){$("msg").textContent="Could not reach the share server, using the long link instead. "}}
-const l=location.href.split("#")[0]+"#"+c;$("box").value=l;let ok=false;try{await navigator.clipboard.writeText(l);ok=true}catch(e){}
-$("msg").textContent=($("msg").textContent.startsWith("Could not")?$("msg").textContent:"")+(short?"Share code "+c+". ":"")+(ok?"Link copied, ":"Copy the link from the box, ")+l.length+" characters."};
+$("bLink").onclick=async()=>{const long=await shareCode();let c=long,short=false,note="";
+if(cloudOn()){try{c=await cloudPut(long);short=true}catch(e){note="Could not reach the share server, so this is the long link. "}}
+const out=short?c:location.href.split("#")[0]+"#"+c;$("box").value=out;let ok=false;try{await navigator.clipboard.writeText(out);ok=true}catch(e){}
+$("msg").textContent=note+(short?"Share code "+c+(ok?" copied. Type it in Menu, Load Blueprint.":". Copy it from the box."):(ok?"Link copied, ":"Copy the link from the box, ")+out.length+" characters.")};
 $("bLoad").onclick=async()=>{$("msg").textContent=(await loadAny($("box").value))?"Loaded.":"Could not read that code."};
 /* welcome menu and the blueprint library kept on this device */
 let wOpen=false,bpCur="";

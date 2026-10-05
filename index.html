@@ -57,6 +57,17 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #profBody{display:flex;flex-direction:column;gap:6px;font-size:13px}#profBody p{margin:0 0 4px;line-height:1.5}#profBody .bio{white-space:pre-wrap;word-break:break-word}
 .fld{font-size:11px;letter-spacing:1px;color:var(--muted);margin-top:6px}#profBody input,#profBody textarea{width:100%;min-width:0}#profBody textarea{height:90px;flex:none}
 .msgline{min-height:1.4em;font-size:12px;word-break:break-word}.pubLink,#profBody a{color:var(--acc);word-break:break-all;font-size:12px}.socials div{margin:2px 0}
+#profCard.dossier{background:#d9cfae;color:#2a2618;border:3px solid #6b6139;max-width:560px;font-family:"Courier New",Courier,monospace;gap:0}
+#profCard.dossier .k,#profCard.dossier h2.hidden-title,#profCard.dossier>h2{display:none}
+#profCard.dossier #profBody{gap:0;font-size:13px}#profCard.dossier #profClose{margin-top:12px;background:#2a2618;color:#d9cfae;border-color:#2a2618}
+#profCard.dossier a{color:#4a1f12;font-size:13px;word-break:break-word}
+.dsTop{display:flex;justify-content:space-between;gap:8px;font-size:10px;letter-spacing:2px;border-bottom:2px solid #2a2618;padding-bottom:4px;flex-wrap:wrap}
+.dsStamp{align-self:center;margin:14px 0 8px;font-size:26px;font-weight:bold;letter-spacing:6px;color:#a52a2a;border:4px double #a52a2a;padding:2px 16px;transform:rotate(-6deg);opacity:.9}
+.dsSubj{margin:6px 0}.dsLbl{font-size:10px;letter-spacing:3px}.dsName{display:block!important;margin:0;font-size:28px;letter-spacing:3px;word-break:break-word;color:#2a2618;text-transform:uppercase}
+.dsMeta{font-size:11px;letter-spacing:1px;border-top:1px dashed #2a2618;border-bottom:1px dashed #2a2618;padding:6px 0;margin:8px 0}
+.dsH{margin:14px 0 4px;font-size:12px;letter-spacing:3px;border-bottom:2px solid #2a2618;padding-bottom:2px}
+#profCard.dossier .bio{white-space:pre-wrap;word-break:break-word;line-height:1.5;margin:4px 0}.redact{background:#2a2618;color:#2a2618;user-select:none}
+.builds div{margin:3px 0}.dsEnd{text-align:center;margin-top:16px;font-size:11px;letter-spacing:4px}
 #supBtn{flex:0 0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;font-weight:bold;letter-spacing:1px;padding:8px}
 #supBtn b{color:var(--acc);font-size:14px}
 #supPanel{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px}
@@ -1338,8 +1349,18 @@ async function cloudGet(c){const r=await fetch(fsBase()+"/"+c+"?key="+encodeURIC
 /* ---- login (Google), profile and public profile pages ---- */
 let authUser=null,authReady=false,authErr="",profile=null,sdkP=null,fbDb=null;
 const IN_APP=/FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly|BytedanceWebview|Snapchat|Twitter/i.test(navigator.userAgent);
-const RE_USER=/^[A-Za-z0-9_]{3,20}$/,RE_SOC=/^[A-Za-z0-9._-]{0,30}$/,RE_DISC=/^[A-Za-z0-9._]{0,32}$/;
-const cleanSoc=v=>String(v||"").trim().replace(/^@/,""),ytLink=n=>"https://www.youtube.com/@"+encodeURIComponent(n),ttLink=n=>"https://www.tiktok.com/@"+encodeURIComponent(n);
+const RE_USER=/^[A-Za-z0-9_]{3,20}$/,RE_SOC=/^[A-Za-z0-9._-]{0,30}$/,RE_DISC=/^[A-Za-z0-9._]{0,32}$/,RE_YT=/^(?:[A-Za-z0-9._-]{0,30}|(?:c|user|channel)\/[A-Za-z0-9._-]{1,60})$/;
+const ytLink=ref=>ref.includes("/")?"https://www.youtube.com/"+ref.split("/").map(encodeURIComponent).join("/"):"https://www.youtube.com/@"+encodeURIComponent(ref),ttLink=n=>"https://www.tiktok.com/@"+encodeURIComponent(n),socName=ref=>ref.split("/").pop();
+function normSocial(kind,raw){let v=String(raw||"").trim();if(!v)return{ok:true,ref:""};
+const looksLink=/^https?:\/\//i.test(v)||v.includes("/")||/^(www\.|m\.)?(youtube|tiktok)\.com/i.test(v);
+if(looksLink){let u;try{u=new URL(/^https?:\/\//i.test(v)?v:"https://"+v)}catch(e){return{ok:false,err:"That link does not look right."}}
+const h=u.hostname.toLowerCase().replace(/^(www|m)\./,""),seg=u.pathname.split("/").filter(Boolean);
+if(kind==="youtube"){if(h!=="youtube.com")return{ok:false,err:"That is not a YouTube channel link. Paste a link like youtube.com/@yourname."};
+if(seg[0]&&seg[0][0]==="@")v=decodeURIComponent(seg[0].slice(1));else if(["c","user","channel"].includes(seg[0])&&seg[1])v=seg[0]+"/"+decodeURIComponent(seg[1]);else return{ok:false,err:"Paste your channel link, like youtube.com/@yourname."}}
+else{if(h!=="tiktok.com")return{ok:false,err:"That is not a TikTok profile link. Paste a link like tiktok.com/@yourname."};
+if(seg[0]&&seg[0][0]==="@")v=decodeURIComponent(seg[0].slice(1));else return{ok:false,err:"Paste your profile link, like tiktok.com/@yourname."}}}
+else v=v.replace(/^@/,"");
+return(kind==="youtube"?RE_YT:RE_SOC).test(v)?{ok:true,ref:v}:{ok:false,err:"Use a username or a profile link."}}
 const FB_VER="10.12.2",loadScript=u=>new Promise((res,rej)=>{const e=document.createElement("script");e.src=u;e.onload=res;e.onerror=rej;document.head.appendChild(e)});
 function fsVal(v){if(!v)return null;if("stringValue" in v)return v.stringValue;if("integerValue" in v)return +v.integerValue;if("booleanValue" in v)return v.booleanValue;if("timestampValue" in v)return v.timestampValue;
 if("mapValue" in v){const o={};for(const k in(v.mapValue.fields||{}))o[k]=fsVal(v.mapValue.fields[k]);return o}if("arrayValue" in v)return(v.arrayValue.values||[]).map(fsVal);return null}
@@ -1367,7 +1388,7 @@ else await ref.update(data)}
 /* profile windows */
 const profPanel=$("profPanel"),profBody=$("profBody");
 const mk=(tag,txt,cls)=>{const e=document.createElement(tag);if(txt!==undefined)e.textContent=txt;if(cls)e.className=cls;return e};
-function profShow(kicker,title){$("profKicker").textContent=kicker;$("profTitle").textContent=title;profBody.textContent="";profPanel.hidden=false}
+function profShow(kicker,title){$("profCard").classList.remove("dossier");$("profKicker").textContent=kicker;$("profTitle").textContent=title;profBody.textContent="";profPanel.hidden=false}
 function profHide(){profPanel.hidden=true}
 function fld(label,id,val,max,ph,multi){const l=mk("label",label,"fld");l.htmlFor=id;const i=mk(multi?"textarea":"input");i.id=id;i.value=val||"";i.maxLength=max;if(ph)i.placeholder=ph;profBody.append(l,i);return i}
 function openMyProfile(){if(!authUser)return;if(!profile)viewChoose();else viewEdit()}
@@ -1377,19 +1398,33 @@ b.onclick=async()=>{const v=i.value.trim();if(!RE_USER.test(v)){m.textContent="U
 try{if(await fsGetDoc("usernames/"+v.toLowerCase())){m.textContent="That name is taken. Try another.";b.disabled=false;return}await createProfile(v);profile=await getProfileByUid(authUser.uid);renderLogin();viewEdit("Profile created.")}
 catch(e){m.textContent=e&&e.message==="taken"?"That name is taken. Try another.":"Could not create the profile. Try again.";b.disabled=false}}}
 function viewEdit(note){profShow("MY PROFILE",profile.username);const u=fld("Username","pfUser",profile.username,20),d=fld("About you (shown on your page, up to 300 characters)","pfBio",profile.bio,300,"",true),
-y=fld("YouTube username (no @ and no link)","pfYt",profile.youtube,30),t=fld("TikTok username (no @ and no link)","pfTt",profile.tiktok,30),c=fld("Discord username","pfDc",profile.discord,32);
+y=fld("YouTube","pfYt",profile.youtube,200,"username or link"),t=fld("TikTok","pfTt",profile.tiktok,200,"username or link"),c=fld("Discord username","pfDc",profile.discord,32);
+[[y,"youtube"],[t,"tiktok"]].forEach(p=>p[0].addEventListener("blur",()=>{const r=normSocial(p[1],p[0].value);if(r.ok)p[0].value=r.ref}));
 const m=mk("div",note||"","msgline"),row=mk("div","","shRow"),sv=mk("button","Save"),out=mk("button","Sign out");sv.type=out.type="button";row.append(sv,out);profBody.append(m,row);
 const pub=mk("a","Your public page: "+location.href.split("#")[0]+"#u/"+profile.username);pub.href=location.href.split("#")[0]+"#u/"+encodeURIComponent(profile.username);pub.target="_blank";pub.rel="noopener";pub.className="pubLink";profBody.append(pub);
-sv.onclick=async()=>{const p={username:u.value.trim(),bio:d.value.trim().slice(0,300),youtube:cleanSoc(y.value),tiktok:cleanSoc(t.value),discord:c.value.trim()};
-if(!RE_USER.test(p.username)){m.textContent="Username: 3 to 20 letters, numbers or underscores.";return}if(!RE_SOC.test(p.youtube)||!RE_SOC.test(p.tiktok)){m.textContent="YouTube and TikTok: just the username, letters, numbers, dots, dashes or underscores.";return}if(!RE_DISC.test(p.discord)){m.textContent="Discord username: letters, numbers, dots or underscores.";return}
-sv.disabled=true;m.textContent="Saving...";try{if(p.username.toLowerCase()!==profile.username.toLowerCase()&&await fsGetDoc("usernames/"+p.username.toLowerCase())){m.textContent="That username is taken.";sv.disabled=false;return}
+sv.onclick=async()=>{const yt=normSocial("youtube",y.value),tt=normSocial("tiktok",t.value),p={username:u.value.trim(),bio:d.value.trim().slice(0,300),youtube:yt.ref,tiktok:tt.ref,discord:c.value.trim().replace(/^@/,"")};
+if(!RE_USER.test(p.username)){m.textContent="Username: 3 to 20 letters, numbers or underscores.";return}if(!yt.ok){m.textContent="YouTube: "+yt.err;return}if(!tt.ok){m.textContent="TikTok: "+tt.err;return}if(!RE_DISC.test(p.discord)){m.textContent="Discord username: letters, numbers, dots or underscores.";return}
+y.value=p.youtube;t.value=p.tiktok;sv.disabled=true;m.textContent="Saving...";try{if(p.username.toLowerCase()!==profile.username.toLowerCase()&&await fsGetDoc("usernames/"+p.username.toLowerCase())){m.textContent="That username is taken.";sv.disabled=false;return}
 await saveProfile(p);profile=await getProfileByUid(authUser.uid);renderLogin();viewEdit("Saved.")}catch(e){m.textContent="Could not save. Try again.";sv.disabled=false}};
 out.onclick=async()=>{try{await firebase.auth().signOut()}catch(e){}profHide()}}
-function viewPublic(p){profShow("BUILDER",p.username);if(p.bio)profBody.append(mk("p",p.bio,"bio"));
-const list=mk("div","","socials");const addLink=(label,name,href)=>{const r=mk("div"),a=mk("a",label+": "+name);a.href=href;a.target="_blank";a.rel="noopener noreferrer nofollow ugc";r.append(a);list.append(r)};
-if(p.youtube&&RE_SOC.test(p.youtube))addLink("YouTube","@"+p.youtube,ytLink(p.youtube));if(p.tiktok&&RE_SOC.test(p.tiktok))addLink("TikTok","@"+p.tiktok,ttLink(p.tiktok));if(p.discord&&RE_DISC.test(p.discord))list.append(mk("div","Discord: "+p.discord));
-if(list.children.length)profBody.append(list);else if(!p.bio)profBody.append(mk("p","This builder has not added anything yet."))}
-async function viewPublicByName(name){profShow("BUILDER",name);profBody.append(mk("p","Loading..."));try{const p=await getProfileByName(name);if(p)viewPublic(p);else{profShow("BUILDER","NOT FOUND");profBody.append(mk("p","There is no builder with that username."))}}catch(e){profShow("BUILDER","NOT AVAILABLE");profBody.append(mk("p","Could not load this profile right now."))}}
+/* public profile: a classified dossier */
+const fileNo=uid=>{let h=0;String(uid).split("").forEach(c=>{h=(h*31+c.charCodeAt(0))|0});return "BP-"+(Math.abs(h)%900000+100000)};
+const fmtDate=iso=>{const d=new Date(iso);return isNaN(d)?"UNKNOWN":d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).toUpperCase()};
+async function userBuilds(uid){return[]}   /* filled in when sharing to the Intel Board exists */
+function dsHead(){const c=$("profCard");profShow("","");c.classList.add("dossier");const top=mk("div","","dsTop");top.append(mk("span","TOP SECRET // BASE PLANNER INTEL"));profBody.append(top);const st=mk("div","CLASSIFIED","dsStamp");profBody.append(st)}
+function dsSection(title){profBody.append(mk("h3",title,"dsH"))}
+function redacted(n){return mk("span","\u2588".repeat(n),"redact")}
+function viewPublic(p){dsHead();profBody.firstChild.append(mk("span","FILE "+fileNo(p.uid||p.username)));
+const sub=mk("div","","dsSubj");sub.append(mk("div","SUBJECT","dsLbl"),mk("h2",p.username,"dsName"));profBody.append(sub);
+const meta=mk("div","","dsMeta");meta.append(mk("div","FILED: "+fmtDate(p.createdAt)),mk("div","STATUS: ACTIVE BUILDER"));profBody.append(meta);
+dsSection("BRIEFING");if(p.bio)profBody.append(mk("p",p.bio,"bio"));else{const r=mk("p","","bio");r.append(redacted(18)," ",redacted(9));profBody.append(r)}
+dsSection("KNOWN CHANNELS");const list=mk("div","","socials");const addLink=(label,name,href)=>{const r=mk("div"),a=mk("a",label+": "+name);a.href=href;a.target="_blank";a.rel="noopener noreferrer nofollow ugc";r.append(a);list.append(r)};
+if(p.youtube&&RE_YT.test(p.youtube))addLink("YouTube","@"+socName(p.youtube),ytLink(p.youtube));if(p.tiktok&&RE_SOC.test(p.tiktok))addLink("TikTok","@"+p.tiktok,ttLink(p.tiktok));if(p.discord&&RE_DISC.test(p.discord))list.append(mk("div","Discord: "+p.discord));
+if(list.children.length)profBody.append(list);else{const r=mk("div","NONE ON FILE ","socials");r.append(redacted(7));profBody.append(r)}
+dsSection("FILED BLUEPRINTS");const bl=mk("div","","builds");bl.append(mk("div","Retrieving records..."));profBody.append(bl);
+userBuilds(p.uid).then(list=>{bl.textContent="";if(!list.length){bl.append(mk("div","NO BLUEPRINTS FILED YET."));return}list.forEach(b=>{const r=mk("div");const a=mk("a",b.title||b.code);a.href="#"+b.code;r.append(a);bl.append(r)})}).catch(()=>{bl.textContent="RECORDS UNAVAILABLE."});
+profBody.append(mk("div","\u2014 END OF FILE \u2014","dsEnd"))}
+async function viewPublicByName(name){dsHead();profBody.append(mk("p","Retrieving file..."));try{const p=await getProfileByName(name);if(p)viewPublic(p);else{dsHead();const r=mk("p","NO RECORD ON FILE FOR THAT CODENAME.","bio");profBody.append(r)}}catch(e){dsHead();profBody.append(mk("p","FILE TEMPORARILY UNAVAILABLE.","bio"))}}
 $("profClose").onclick=profHide;profPanel.addEventListener("pointerdown",e=>{if(e.target===profPanel)profHide()});
 $("who").onclick=()=>{if(authUser)openMyProfile()};
 $("wLogin").onclick=async()=>{const m=$("wAuthMsg");m.textContent="";if(authUser){wHide();openMyProfile();return}

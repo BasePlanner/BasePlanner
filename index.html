@@ -13,7 +13,6 @@
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 :root,:root[data-theme="olive"]{--bg:#12150d;--paper:#191e11;--ink:#cfd1a8;--muted:#a3a681;--panel:#1e2415;--acc:#9bad52;--acctxt:#12150d;--border:#59633a;--head:#cfd1a8}
 :root[data-theme="light"]{--bg:#cfc9a4;--paper:#e6e1c3;--ink:#353b24;--muted:#5a5f45;--panel:#d9d3b1;--acc:#5d6b2e;--acctxt:#e6e1c3;--border:#353b24;--head:#353b24}
-:root[data-theme="amber"]{--bg:#121314;--paper:#191b1d;--ink:#d9dbd8;--muted:#9ea29d;--panel:#202325;--acc:#e3a32e;--acctxt:#121314;--border:#50565a;--head:#e3a32e}
 :root[data-theme="green"]{--bg:#050905;--paper:#080f08;--ink:#a6f0a6;--muted:#68c468;--panel:#0b140b;--acc:#3ddc5a;--acctxt:#050905;--border:#1f6a2c;--head:#3ddc5a}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
@@ -102,7 +101,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 <div id="sh"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><button id="bSave">Save blueprint</button><button id="bLink">Get share code</button><button id="bLoad">Load code/link</button><textarea id="box" placeholder="Share link or code. Paste one here and press Load."></textarea><span id="msg" style="font-size:12px"></span></div>
-<footer id="foot"><span>Unofficial fan project, not affiliated with the makers of Wardogs.</span><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
+<footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="supPanel" role="dialog" aria-modal="true" aria-labelledby="supTitle" hidden><div id="supCard"><div class="k">SUPPLY COSTS</div><h2 id="supTitle">BREAKDOWN</h2><div id="supList"></div><button id="supClose" type="button">Close</button></div></div>
 <div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle" hidden>
 <div id="wCard">
@@ -114,7 +113,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <button class="wBtn" id="wBrowse" disabled>INTEL BOARD<small>Browse blueprints from other builders. Coming soon.</small></button>
 <button class="wBtn" id="wLogin" disabled><span id="wLoginT">LOGIN / REGISTER</span><small id="wLoginS">Save blueprints online and post to the Intel Board. Coming soon.</small></button>
 <div id="wAuthMsg" style="font-size:12px;color:var(--muted);margin:0 0 8px"></div>
-<div class="wfoot">Unofficial fan project, not affiliated with the makers of Wardogs.<br><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Join the Discord</a> to report bugs or share ideas.</div>
+<div class="wfoot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Join the Discord</a> to report bugs or share ideas.</div>
 <button class="wBtn" id="wBack" hidden style="text-align:center;font-size:12px">BACK TO THE PLANNER</button>
 </div>
 <div id="wLoad" hidden>
@@ -146,7 +145,6 @@ const push=()=>{autoDirty=true;hist.push(items.map(i=>({...i})));if(hist.length>
 const THEMES={
 olive:{n:"Vanguard",sb:"#12150d",gr:"#20271a",mi:"#2a3320",ma:"#3c482a",ac:"#9bad52",lh:0.62,ld:0.6},
 light:{n:"Map Table",sb:"#cfc9a4",gr:"#e2dcbc",mi:"#bdb890",ma:"#8f8a63",ac:"#5d6b2e",lh:0.8,ld:0.7},
-amber:{n:"Command Post",sb:"#121314",gr:"#1c1f21",mi:"#262a2d",ma:"#363c40",ac:"#e3a32e",lh:0.62,ld:0.6},
 green:{n:"Recon",sb:"#050905",gr:"#09100a",mi:"#0f220f",ma:"#17421c",ac:"#3ddc5a",lh:0.62,ld:0.6}};
 const hx=s=>parseInt(s.slice(1),16);let themeKey="olive";try{const k=localStorage.getItem("wd_theme");if(k&&THEMES[k])themeKey=k}catch(e){}
 let TH=THEMES[themeKey];document.documentElement.setAttribute("data-theme",themeKey);

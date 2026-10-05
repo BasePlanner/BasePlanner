@@ -951,7 +951,7 @@ return {hesco,bremer,hedgehog,gate,barbed,bunker,shelter,tower,loudspeaker,build
 
 const lib=buildLib();
 const MODELS={hb1:()=>lib.hesco(11,false,true),hbt:()=>lib.hesco(22,true,true),hwall:()=>{const g=new THREE.Group();[-1.5,-0.5,0.5,1.5].forEach(x=>{const b=lib.hesco(22,true,true);b.position.x=x;g.add(b)});return g},bremer:lib.bremer,hedge:lib.hedgehog,gate:lib.gate,wire:lib.barbed,bunker:()=>lib.bunker(false),shelter:lib.shelter,tower:lib.tower,loud:lib.loudspeaker,radio:lib.builderRadio,mortar:lib.mortar,sam:lib.talon,ciws:lib.ciws,sting:lib.stinger,refuel:lib.refuelStation,repair:lib.repairStation,tent:lib.reconTent,door:lib.doorUnit,fob:lib.fob,oil:lib.oil,bunkerShell:()=>lib.bunker(false,true),shelterShell:()=>lib.shelter(true),towerShell:()=>lib.tower(true),sandbag:()=>{const g=new THREE.Group();[-0.5,0.5].forEach(x=>{const c=lib.sandbagCell(4,0.2,3);c.position.x=x;g.add(c)});return g}};
-const TPL={},INS={},CAP=3000;
+const TPL={},INS={},CAP0=256;
 const yawOf=(t,r)=>[Math.PI,Math.PI/2,0,-Math.PI/2][(((t==="bunker"||t==="tower")?2:0)+r)%4];
 const itemMat=it=>{const [w,h]=dims(it.t,it.r),m=new THREE.Matrix4();m.compose(new THREE.Vector3(it.x+w/2,((it.l||1)-1)*LH,it.y+h/2),new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),yawOf(it.t,it.r)),new THREE.Vector3(1,1,1));return m};
 function getTpl(t){if(!TPL[t]){try{TPL[t]=MODELS[t]()}catch(e){console.error(t,e);const dg=document.getElementById("dbg");if(dg)dg.innerHTML+=" · <b>model error: "+t+" ("+String(e&&e.message).slice(0,80)+")</b>";const g=new THREE.Group(),m=new THREE.Mesh(new THREE.BoxGeometry(T[t].w*0.96,T[t].y,T[t].h*0.96),new THREE.MeshStandardMaterial({color:T[t].c}));m.position.y=T[t].y/2;g.add(m);TPL[t]=g}}return TPL[t]}
@@ -961,13 +961,15 @@ root.traverse(o=>{if(!o.isMesh)return;if(Array.isArray(o.material)){extras.push(
 if(o.isInstancedMesh){const a=new THREE.Matrix4(),b=new THREE.Matrix4();for(let k=0;k<o.count;k++){o.getMatrixAt(k,a);b.multiplyMatrices(o.matrixWorld,a);addGeo(o.geometry,o.material,b)}}else addGeo(o.geometry,o.material,o.matrixWorld)});
 const parts=[];byMat.forEach((list,mat)=>{let names=null;list=list.map(g=>g.index?g.toNonIndexed():g);list.forEach(g=>{const n=Object.keys(g.attributes);names=names?names.filter(x=>n.includes(x)):n});
 if(!names.includes("position")||!names.includes("normal"))return;list.forEach(g=>Object.keys(g.attributes).forEach(k=>{if(!names.includes(k))g.deleteAttribute(k)}));
-const mg=THREE.BufferGeometryUtils.mergeBufferGeometries(list,false);if(!mg)return;const im=new THREE.InstancedMesh(mg,mat,CAP);im.frustumCulled=false;im.count=0;scene.add(im);parts.push(im)});
-const ex=new THREE.Group();scene.add(ex);INS[t]={parts,extras,ex};return INS[t]}
+const mg=THREE.BufferGeometryUtils.mergeBufferGeometries(list,false);if(!mg)return;const im=new THREE.InstancedMesh(mg,mat,CAP0);im.frustumCulled=false;im.count=0;scene.add(im);parts.push(im)});
+const ex=new THREE.Group();scene.add(ex);INS[t]={parts,extras,ex,cap:CAP0};return INS[t]}
 function rebuild(){armDel=false;if(autoDirty)scheduleAuto();updSupplies();const sig=fobs().map(f=>f.id+","+f.x+","+f.y).join("|");if(sig!==lastSig){lastSig=sig;drawZones();frameAuto()}
 const per={},addI=(t,M)=>(per[t]=per[t]||[]).push(M);
 (ed?[ed.item]:items).forEach(it=>{const ps=partsOf(it);if(ps){addI(it.t+"Shell",itemMat(it));ps.forEach(p=>addI(partKind(p),partMat(it,p)))}else addI(it.t,itemMat(it))});
 Object.keys(per).forEach(t=>getIns(t));
-Object.keys(INS).forEach(t=>{const o=INS[t],L=(per[t]||[]).slice(0,CAP);o.parts.forEach(im=>{L.forEach((M,k)=>im.setMatrixAt(k,M));im.count=L.length;im.instanceMatrix.needsUpdate=true});
+Object.keys(INS).forEach(t=>{const o=INS[t],L=per[t]||[];
+if(L.length>o.cap){let c=o.cap;while(c<L.length)c*=2;o.parts=o.parts.map(im=>{const n=new THREE.InstancedMesh(im.geometry,im.material,c);n.frustumCulled=false;n.count=0;scene.add(n);scene.remove(im);return n});o.cap=c}
+o.parts.forEach(im=>{L.forEach((M,k)=>im.setMatrixAt(k,M));im.count=L.length;im.instanceMatrix.needsUpdate=true});
 while(o.ex.children.length)o.ex.remove(o.ex.children[0]);
 L.forEach(M0=>{o.extras.forEach(e=>{const m=new THREE.Mesh(e.geo,e.mat);m.matrixAutoUpdate=false;m.matrix.multiplyMatrices(M0,e.m);o.ex.add(m)})})});
 while(grp.children.length)grp.remove(grp.children[0]);
@@ -1279,9 +1281,12 @@ try{for(const f of["app","auth"])await loadScript("https://www.gstatic.com/fireb
 firebase.initializeApp({apiKey:CLOUD.apiKey,authDomain:CLOUD.authDomain||CLOUD.projectId+".firebaseapp.com",projectId:CLOUD.projectId});
 firebase.auth().onAuthStateChanged(u=>{authUser=u;authReady=true;renderLogin()})}catch(e){authErr="Sign-in is not available right now.";renderLogin()}}
 $("wLogin").onclick=async()=>{const m=$("wAuthMsg");m.textContent="";try{if(authUser)await firebase.auth().signOut();else await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){m.textContent=e&&e.code==="auth/popup-closed-by-user"?"Sign-in cancelled.":"Could not sign in. Allow pop-ups for this site and try again."}};
+async function inflateLimited(u,max){const rd=new Blob([u]).stream().pipeThrough(new DecompressionStream("deflate-raw")).getReader(),out=[];let n=0;
+for(;;){const r=await rd.read();if(r.done)break;n+=r.value.length;if(n>max){try{await rd.cancel()}catch(e){}throw new Error("too big")}out.push(r.value)}
+const all=new Uint8Array(n);let o=0;out.forEach(c=>{all.set(c,o);o+=c.length});return all}
 async function loadAny(c){try{c=String(c).trim();if(c.includes("#"))c=c.split("#").pop();c=c.trim();
 if(c.length===5&&!/^w2/i.test(c)&&CODE_RE.test(c.toUpperCase())){if(!cloudOn())return false;const d=await cloudGet(c.toUpperCase());return d?await loadAny(d):false}
-if(c.startsWith("w2")){const u=unb64u(c.slice(2));let body=u.subarray(1);if(u[0]&1)body=await pipeBytes(body,new DecompressionStream("deflate-raw"));return loadItems(unpackItems(body))}return load(c)}catch(e){return false}}
+if(c.startsWith("w2")){const u=unb64u(c.slice(2));let body=u.subarray(1);if(u[0]&1)body=await inflateLimited(body,1500000);return loadItems(unpackItems(body))}return load(c)}catch(e){return false}}
 $("bLink").onclick=async()=>{const long=await shareCode();let c=long,short=false,note="";
 if(cloudOn()){try{c=await cloudPut(long);short=true}catch(e){note="Could not reach the share server, so this is the long link. "}}
 const out=short?c:location.href.split("#")[0]+"#"+c;$("box").value=out;let ok=false;try{await navigator.clipboard.writeText(out);ok=true}catch(e){}

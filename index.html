@@ -65,6 +65,7 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #profCard{background:var(--paper);border:2px solid var(--border);max-width:520px;width:100%;max-height:86vh;overflow:auto;display:flex;flex-direction:column;padding:16px 18px;gap:6px}
 #profCard .k{font-size:11px;letter-spacing:4px;color:var(--muted)}#profCard h2{margin:0 0 4px;font-size:22px;letter-spacing:3px;color:var(--head);word-break:break-word}
 #profBody{display:flex;flex-direction:column;gap:6px;font-size:13px}#profBody p{margin:0 0 4px;line-height:1.5}#profBody .bio{white-space:pre-wrap;word-break:break-word}
+.pvDate{margin-top:14px;font-size:12px;color:var(--muted)}.pvH{margin:14px 0 2px;font-size:12px;letter-spacing:2px;color:var(--acc);font-weight:bold}.danger{border-color:#c0392b!important;color:#e07b6b}
 .fld{font-size:11px;letter-spacing:1px;color:var(--muted);margin-top:6px}#profBody input,#profBody textarea{width:100%;min-width:0}#profBody textarea{height:90px;flex:none}
 .msgline{min-height:1.4em;font-size:12px;word-break:break-word}.pubLink,#profBody a{color:var(--acc);word-break:break-all;font-size:12px}.socials div{margin:2px 0}
 #profCard.dossier{background:#d9cfae;color:#2a2618;border:3px solid #6b6139;max-width:560px;font-family:"Courier New",Courier,monospace;gap:0}
@@ -153,7 +154,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button>
 <div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name" hidden><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbAdmin" type="button" hidden>Delete post (admin)</button><button id="vbClose" type="button">Close</button></div></div><div id="vbBuilder" hidden></div><div id="vbSupply" hidden></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 
-<footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
+<footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a><a href="#privacy" id="fPriv" style="margin-left:14px">Privacy and terms</a></footer>
 <div id="boardPanel" hidden><div id="boardTop"><div class="k">INTEL BOARD</div><div id="boardBar"><input id="boardQ" placeholder="Search by title or builder" aria-label="Search the board"><button id="boardGo" type="button">Search</button><select id="boardSort" aria-label="Sort"><option value="new">Newest</option><option value="liked">Most liked</option></select><button id="boardClose" type="button">Close</button></div></div><div id="boardGrid"></div><div id="boardMsg" role="status"></div><button id="boardMore" type="button" hidden>Load more</button></div>
 <div id="profPanel" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div id="profCard"><div class="k" id="profKicker">PROFILE</div><h2 id="profTitle">PROFILE</h2><div id="profBody"></div><button id="profClose" type="button">Close</button></div></div>
 <div id="supPanel" role="dialog" aria-modal="true" aria-labelledby="supTitle" hidden><div id="supCard"><div class="k">SUPPLY COSTS</div><h2 id="supTitle">BREAKDOWN</h2><div id="supList"></div><button id="supClose" type="button">Close</button></div></div>
@@ -167,7 +168,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <button class="wBtn" id="wBrowse" disabled>INTEL BOARD<small id="wBrowseS">Login to browse community blueprints.</small></button>
 <button class="wBtn" id="wLogin" disabled><span id="wLoginT">LOGIN / REGISTER</span><small id="wLoginS">Save blueprints online and post to the Intel Board. Coming soon.</small></button>
 <div id="wAuthMsg" style="font-size:12px;color:var(--muted);margin:0 0 8px"></div>
-<div class="wfoot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Join the Discord</a> to report bugs or share ideas.</div>
+<div class="wfoot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Join the Discord</a> to report bugs or share ideas. <a href="#privacy" id="wPriv">Privacy and terms</a></div>
 <button class="wBtn" id="wBack" hidden style="text-align:center;font-size:12px">BACK TO THE PLANNER</button>
 </div>
 <div id="wLoad" hidden>
@@ -1429,6 +1430,7 @@ function profHide(){profPanel.hidden=true}
 function fld(label,id,val,max,ph,multi){const l=mk("label",label,"fld");l.htmlFor=id;const i=mk(multi?"textarea":"input");i.id=id;i.value=val||"";i.maxLength=max;if(ph)i.placeholder=ph;profBody.append(l,i);return i}
 function openMyProfile(){if(!authUser)return;if(!profile)viewChoose();else viewEdit()}
 function viewChoose(){profShow("WELCOME","CHOOSE A USERNAME");profBody.append(mk("p","Pick the name other builders will see. 3 to 20 letters, numbers or underscores. You can change it later."));
+{const lg=mk("p","By creating a profile you accept the "),la=mk("a","Privacy and terms");la.href="#privacy";la.target="_blank";la.rel="noopener";lg.append(la,".");profBody.append(lg)}
 const i=fld("Username","pfUser","",20,"for example Sgt_Hesco"),m=mk("div","","msgline"),b=mk("button","Create profile");b.type="button";profBody.append(m,b);
 b.onclick=async()=>{const v=i.value.trim();if(!RE_USER.test(v)){m.textContent="Use 3 to 20 letters, numbers or underscores.";return}b.disabled=true;m.textContent="Checking...";
 try{if(await fsGetDoc("usernames/"+v.toLowerCase())){m.textContent="That name is taken. Try another.";b.disabled=false;return}await createProfile(v);profile=await getProfileByUid(authUser.uid);renderLogin();viewEdit("Profile created.")}
@@ -1436,7 +1438,7 @@ catch(e){m.textContent=e&&e.message==="taken"?"That name is taken. Try another."
 function viewEdit(note){profShow("MY PROFILE",profile.username);const u=fld("Username","pfUser",profile.username,20),d=fld("About you (shown on your page, up to 300 characters)","pfBio",profile.bio,300,"",true),
 y=fld("YouTube","pfYt",profile.youtube,200,"username or link"),t=fld("TikTok","pfTt",profile.tiktok,200,"username or link"),c=fld("Discord username","pfDc",profile.discord,32);
 [[y,"youtube"],[t,"tiktok"]].forEach(p=>p[0].addEventListener("blur",()=>{const r=normSocial(p[1],p[0].value);if(r.ok)p[0].value=r.ref}));
-const m=mk("div",note||"","msgline"),row=mk("div","","shRow"),sv=mk("button","Save"),out=mk("button","Sign out");sv.type=out.type="button";row.append(sv,out);profBody.append(m,row);
+const m=mk("div",note||"","msgline"),row=mk("div","","shRow"),sv=mk("button","Save"),out=mk("button","Sign out"),del=mk("button","Delete my account");sv.type=out.type=del.type="button";del.className="danger";del.onclick=()=>viewDelete();row.append(sv,out,del);profBody.append(m,row);
 const pub=mk("a","Your public page: "+location.href.split("#")[0]+"#u/"+profile.username);pub.href=location.href.split("#")[0]+"#u/"+encodeURIComponent(profile.username);pub.target="_blank";pub.rel="noopener";pub.className="pubLink";profBody.append(pub);
 sv.onclick=async()=>{const yt=normSocial("youtube",y.value),tt=normSocial("tiktok",t.value),p={username:u.value.trim(),bio:d.value.trim().slice(0,300),youtube:yt.ref,tiktok:tt.ref,discord:c.value.trim().replace(/^@/,"")};
 if(!RE_USER.test(p.username)){m.textContent="Username: 3 to 20 letters, numbers or underscores.";return}if(!yt.ok){m.textContent="YouTube: "+yt.err;return}if(!tt.ok){m.textContent="TikTok: "+tt.err;return}if(!RE_DISC.test(p.discord)){m.textContent="Discord username: letters, numbers, dots or underscores.";return}
@@ -1463,6 +1465,41 @@ info.append(a,mk("div",(b.n||0)+" items, "+fmtN(b.s||0)+" supplies"),mk("div",fm
 profBody.append(mk("div","\u2014 END OF FILE \u2014","dsEnd"))}
 async function viewPublicByName(name){dsHead();profBody.append(mk("p","Retrieving file..."));try{const p=await getProfileByName(name);if(p)viewPublic(p);else{dsHead();const r=mk("p","NO RECORD ON FILE FOR THAT CODENAME.","bio");profBody.append(r)}}catch(e){dsHead();profBody.append(mk("p","FILE TEMPORARILY UNAVAILABLE.","bio"))}}
 
+/* ---- privacy and terms ---- */
+const SITE_OPERATOR="",SITE_CONTACT_EMAIL="",SITE_ANALYTICS=false,PRIV_DATE="6 October 2026";
+function privLink(text,href){const a=mk("a",text);a.href=href;a.target="_blank";a.rel="noopener";return a}
+function privacySections(){const who=SITE_OPERATOR||"the owner of this site";const contact=mk("p","Questions, data requests and reports: ");
+if(SITE_CONTACT_EMAIL)contact.append(privLink(SITE_CONTACT_EMAIL,"mailto:"+SITE_CONTACT_EMAIL),".");else contact.append("message us on ",privLink("the Discord server","https://discord.gg/qArh7JqVuF"),".");
+const rights=mk("p","You can ask to see, correct, export or delete your data, to restrict or object to its use, and to withdraw consent where it is used. Deleting your account is available in My Profile. For anything else use the contact above. You can also complain to your data protection authority.");
+const L=[
+["WHO RUNS THIS SITE",["This site, Wardogs Base Builder, is run by "+who+". It is a free base blueprint tool for the game Wardogs and a personal, non-commercial project.",contact]],
+["IF YOU DO NOT LOG IN",["Nothing about you is sent to our database just by using the planner. The base you work on stays in your own browser.","If you press Get share code without being logged in, the blueprint and its name are stored in our database so others can open the code. No account details are attached.","Opening the site makes your browser contact the companies that deliver parts of it: GitHub (hosting), jsDelivr (the 3D library) and Google (login and database libraries). Like any website, they see your IP address and browser details."]],
+["IF YOU LOG IN",["Login uses Google. Google and Firebase keep your Google account ID, email address, name and profile picture for the sign-in. We do not store or show these in our own database.","We store: the username you choose; an optional about text; optional YouTube, TikTok and Discord usernames; your saved blueprints (name, description, items); the Intel Board posts you make (title, description, blueprint, date); your likes; and a record that you opened a post, so each person is counted once in its view count.","Public: your username, about text, social usernames and Intel Board posts, and the name and description on blueprints you share. Private: your saved blueprints. Your likes and views are kept under a random account ID and are not shown to others."]],
+["WHAT STAYS IN YOUR BROWSER",["The base you are working on, blueprints saved on this device, your theme, a list of posts you have opened, and your login session. None of it is used for advertising or tracking. You can clear it in your browser settings."]]];
+if(SITE_ANALYTICS)L.push(["VISIT STATISTICS",["We count visits with GoatCounter. It sets no cookies and does not store personal data, it identifies unique visits with a non-identifiable hash."]]);
+L.push(["WHY WE USE YOUR DATA",["To run the features you use: saving, sharing, profiles, the Intel Board, likes and view counts, and to keep the site safe and remove abusive content. We do not sell data, show ads or build profiles about you."]],
+["WHO ELSE HANDLES IT",["Google (Firebase Authentication and Cloud Firestore) stores account and database data for us. GitHub hosts the site. Some of these companies may process data outside the EU, under safeguards such as the EU-US Data Privacy Framework or standard contractual clauses."]],
+["HOW LONG",["Your data stays until you delete it. You can delete a blueprint or post yourself at any time, or delete your whole account in My Profile. That removes your profile, saved blueprints, Intel Board posts and the share codes you made while logged in, and your login. Likes and views you left on other posts keep no link to you afterwards. Blueprints saved only on this device stay on this device until you remove them."]],
+["YOUR RIGHTS",[rights]],
+["AGE",["You must be at least 16 to create an account."]],
+["TERMS OF USE",["The tool is provided as it is and free of charge. Costs, sizes and rules follow the game as best we know and can differ from the game. We may change or stop the site at any time.","You are responsible for what you post. Do not post anything illegal, abusive or hateful, other people's personal details, or work you do not have the right to share. We may remove content or accounts that break these rules.","You keep ownership of your blueprints. By sharing one you allow the site to show it to others, including letting other builders remix it, with credit to you.","To report content or ask a question, use the contact above and include the share code or username."]]);return L}
+function viewPrivacy(){profShow("LEGAL","PRIVACY AND TERMS");privacySections().forEach(([h,ps])=>{profBody.append(mk("h3",h,"pvH"));ps.forEach(p=>profBody.append(typeof p==="string"?mk("p",p):p))});profBody.append(mk("p","Last updated "+PRIV_DATE+".","pvDate"))}
+["fPriv","wPriv"].forEach(id=>{$(id).onclick=e=>{e.preventDefault();viewPrivacy()}});
+/* deleting an account */
+async function deleteMyAccount(say){const user=authUser,uid=user.uid,name=profile.username.toLowerCase();say("Confirming it is you...");
+try{await user.reauthenticateWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){if(e&&e.code==="auth/popup-closed-by-user")throw e;const x=new Error("reauth");x.userMsg="Could not confirm your sign-in. Allow pop-ups and try again.";throw x}
+const sweep=async(label,make)=>{for(let k=0;k<40;k++){const q=await make().limit(50).get();if(q.empty)return;say(label);const b=fbDb.batch();q.forEach(d=>b.delete(d.ref));await b.commit()}};
+await sweep("Removing your Intel Board posts...",()=>fbDb.collection("board").where("uid","==",uid));
+await sweep("Removing your share codes...",()=>fbDb.collection("bps").where("uid","==",uid));
+await sweep("Removing your saved blueprints...",()=>fbDb.collection("users").doc(uid).collection("saves"));
+say("Removing your profile...");const b=fbDb.batch();b.delete(fbDb.collection("usernames").doc(name));b.delete(fbDb.collection("users").doc(uid));await b.commit();
+say("Removing your login...");await user.delete();try{localStorage.removeItem("wd_seen_"+uid)}catch(e){}profile=null}
+function viewDelete(){profShow("ACCOUNT","DELETE YOUR ACCOUNT");
+profBody.append(mk("p","This permanently deletes your profile, the blueprints saved in your account, your Intel Board posts and the share codes you made while logged in, and then removes your login. It cannot be undone."),mk("p","Blueprints saved only on this device stay on this device. Your likes and views on other posts stay, with no link to you."));
+const i=fld("Type your username to confirm","dlName","",20),m=mk("div","","msgline"),row=mk("div","","shRow"),go=mk("button","Delete everything"),back=mk("button","Back");go.type=back.type="button";go.disabled=true;go.className="danger";row.append(go,back);profBody.append(m,row);
+i.addEventListener("input",()=>{go.disabled=i.value.trim().toLowerCase()!==profile.username.toLowerCase()});back.onclick=()=>viewEdit();
+go.onclick=async()=>{go.disabled=true;back.disabled=true;i.disabled=true;try{await deleteMyAccount(t=>{m.textContent=t});profBody.textContent="";profBody.append(mk("p","Your account and its data were deleted. Goodbye, and thanks for building."))}
+catch(e){m.textContent=e&&e.code==="auth/popup-closed-by-user"?"Cancelled. Nothing was deleted.":(e&&e.userMsg)||"Could not finish. Some data may already be removed. Press Delete everything to continue.";back.disabled=false;i.disabled=false;go.disabled=false}}}
 /* ---- read-only shared page, remixing ---- */
 const vbMsg=t=>{$("vbTxt").textContent=t};
 function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbSupply").hidden=true;$("vbAdmin").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
@@ -1653,7 +1690,7 @@ $("wOpenCode").onclick=async()=>{if(!(await openShared($("wCode").value)))$("wMs
 addEventListener("resize",setHdr);
 let lw=0,lh=0;function fit(){const W=box.clientWidth,H=box.clientHeight;if(!W||!H||(W===lw&&H===lh))return;lw=W;lh=H;ren.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix()}
 addEventListener("resize",fit);fit();setView(true);rebuild();setHdr();$("wBrowse").disabled=!cloudOn();initAuth();(async()=>{const h=location.hash.slice(1);let ok=false;
-if(/^u\//i.test(h)){if(cloudOn())viewPublicByName(decodeURIComponent(h.slice(2)));ok=await restoreAuto(true)}
+if(h==="privacy"){viewPrivacy();ok=await restoreAuto(true)}else if(/^u\//i.test(h)){if(cloudOn())viewPublicByName(decodeURIComponent(h.slice(2)));ok=await restoreAuto(true)}
 else if(h.length>0){ok=await openShared(h);if(!ok)ok=await restoreAuto(true)}else ok=await restoreAuto(true);if(!viewOnly)autoDirty=false;autoReady=true;if(!ok)wShow(false)})();
 (function loop(){requestAnimationFrame(loop);fit();moveCam();ctl.update();
 const dd=cam.position.distanceTo(ctl.target),nn=Math.max(0.05,dd/150),ff=Math.max(400,dd*40);if(Math.abs(nn-cam.near)>nn*0.05||Math.abs(ff-cam.far)>ff*0.05){cam.near=nn;cam.far=ff;cam.updateProjectionMatrix()}

@@ -87,7 +87,7 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #supList table{width:100%;border-collapse:collapse;margin:0 0 10px}#supList th{text-align:right;font-size:10px;letter-spacing:1px;color:var(--muted);border-bottom:1.5px solid var(--border);padding:3px 4px}
 #supList th:first-child,#supList td:first-child{text-align:left}#supList td{text-align:right;padding:3px 4px;border-bottom:1px solid var(--border)}
 #supList .sub td{font-weight:bold;border-bottom:0}#supList .grand{display:flex;justify-content:space-between;font-size:15px;font-weight:bold;color:var(--head);border-top:2px solid var(--border);padding-top:8px}
-#supList h4{margin:6px 0 4px;font-size:11px;letter-spacing:2px;color:var(--acc)}
+#supList h4{margin:10px 0 4px;font-size:18px;font-weight:bold;letter-spacing:2px;color:var(--acc)}
 #foot{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:2px 14px;padding:4px 12px 6px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
 #foot a,#wCard a{color:var(--acc)}
 .wfoot{margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted)}
@@ -96,7 +96,7 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #vbBuilder.full{width:400px;max-width:46vw;max-height:calc(50% - 56px);overflow:auto;padding:12px 16px;font-size:15px}.bcStamp{display:inline-block;font-size:15px;font-weight:bold;letter-spacing:4px;color:#a52a2a;border:2px double #a52a2a;padding:0 8px;transform:rotate(-3deg);margin-bottom:4px}
 .bcHd{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:4px}.bcBody{font-size:15px;line-height:1.5;border-top:1px dashed #2a2618;padding-top:5px}.bcBody p{margin:2px 0 6px;white-space:pre-wrap;word-break:break-word}.bcBody .bcLbl{margin-top:6px}.bcBody button{margin-top:10px;background:#2a2618;color:#d9cfae;border-color:#2a2618;padding:6px 12px;min-height:34px;font-size:14px}
 #vbSupply{position:absolute;right:8px;bottom:8px;z-index:5;width:400px;max-width:46vw;max-height:calc(50% - 24px);overflow:auto;background:#d9cfae;color:#2a2618;border:2px solid #6b6139;padding:12px 16px;font-size:15px;line-height:1.5}
-.sHd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid #2a2618;padding-bottom:3px;margin-bottom:4px}.sHd b{font-size:20px}
+.sHd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid #2a2618;padding-bottom:3px;margin-bottom:4px}.sHd b{font-size:22px}.sTitle{font-size:22px;font-weight:bold;letter-spacing:3px;margin-top:10px}.sHd .sTitle{margin-top:0}
 .sRow{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted #6b6139}.sRow span:first-child{flex:1 1 auto;word-break:break-word}.sRow span:last-child{flex:0 0 auto}.sRow.tot{font-weight:bold;border-bottom:0}
 .sNote{font-size:12px;margin-top:4px}
 .bcLbl{font-size:11px;letter-spacing:3px}.bcName{display:block;font-size:20px;font-weight:bold;letter-spacing:1px;color:#2a2618;word-break:break-all}
@@ -1149,8 +1149,9 @@ $("bParts").onclick=()=>{const it=sel.size===1&&items.find(i=>sel.has(i.id));if(
 const PAINT=new Set(["hb1","hbt","hwall","bremer"]);let stroke=null,rstroke=null,ghostKey="",pan=null;const keys={};
 let supOpen=false;
 const fmtN=n=>n.toLocaleString("en-US");
+const FOB_PRE=1250;
 function supCalc(){const placed={};items.forEach(i=>{placed[i.t]=(placed[i.t]||0)+1});
-const P=Object.keys(placed).filter(k=>T[k]).map(k=>({k,n:placed[k],c:COST[k]||0})).sort((a,b)=>b.n*b.c-a.n*a.c||a.k.localeCompare(b.k)),sp=P.reduce((a,r)=>a+r.n*r.c,0);return{P,sp,total:sp}}
+const P=Object.keys(placed).filter(k=>T[k]&&k!=="fob").map(k=>({k,n:placed[k],c:COST[k]||0})).sort((a,b)=>b.n*b.c-a.n*a.c||a.k.localeCompare(b.k)),sp=P.reduce((a,r)=>a+r.n*r.c,0);const fobs=placed.fob||0,pre=fobs*FOB_PRE,need=Math.max(0,sp-pre);return{P,sp,total:sp,fobs,pre,need,used:sp-need}}
 function supTable(title,rows,sub){const L=$("supList"),h=document.createElement("h4");h.textContent=title;L.appendChild(h);
 if(!rows.length){const d=document.createElement("div");d.style.cssText="color:var(--muted);margin:0 0 10px";d.textContent="Nothing yet.";L.appendChild(d);return}
 const t=document.createElement("table"),hd=document.createElement("tr");["Item","Qty","Each","Total"].forEach(x=>{const c=document.createElement("th");c.textContent=x;hd.appendChild(c)});t.appendChild(hd);
@@ -1159,8 +1160,8 @@ const st=document.createElement("tr");st.className="sub";["Subtotal","","",fmtN(
 /* what the logistics team brings: biggest containers first (pallet, large crate, small crate), the rest loose */
 const PACK=[{n:"Pallet",c:1800},{n:"Large crate",c:1750},{n:"Small crate",c:1200}],SLOT=50;
 function packSupplies(t){let rem=Math.max(0,Math.round(t));const rows=PACK.map(p=>{const q=Math.floor(rem/p.c);rem-=q*p.c;return{n:p.n,q,c:p.c}});return{rows,loose:rem}}
-function supLogi(L,total){const h=document.createElement("h4");h.textContent="LOGISTICS: WHAT TO BRING";L.appendChild(h);
-if(total<=0){const d=document.createElement("div");d.style.cssText="color:var(--muted);margin:0 0 10px";d.textContent="Nothing to bring yet.";L.appendChild(d);return}
+function supLogi(L,total){const h=document.createElement("h4");h.textContent="LOGISTICS";L.appendChild(h);
+if(total<=0){const d=document.createElement("div");d.style.cssText="color:var(--muted);margin:0 0 10px";d.textContent="Nothing needed.";L.appendChild(d);return}
 const pk=packSupplies(total),t=document.createElement("table"),hd=document.createElement("tr");["Bring","Qty","Holds each","Supplies"].forEach(x=>{const c=document.createElement("th");c.textContent=x;hd.appendChild(c)});t.appendChild(hd);
 const add=a=>{const tr=document.createElement("tr");a.forEach(x=>{const c=document.createElement("td");c.textContent=x;tr.appendChild(c)});t.appendChild(tr);return tr};
 pk.rows.filter(r=>r.q>0).forEach(r=>add([r.n,fmtN(r.q),fmtN(r.c),fmtN(r.q*r.c)]));
@@ -1169,7 +1170,9 @@ const st=add(["Total","","",fmtN(total)]);st.className="sub";L.appendChild(t);
 const n=document.createElement("div");n.style.cssText="color:var(--muted);font-size:11px;margin:-4px 0 8px";n.textContent="Pallet 1,800 supplies, large crate 1,750 (35 slots), small crate 1,200 (24 slots), a slot is 50 supplies.";L.appendChild(n)}
 function supRender(){const c=supCalc(),L=$("supList");L.textContent="";supTable("PLACED ITEMS",c.P,c.sp);
 const g=document.createElement("div");g.className="grand";g.style.marginBottom="10px";const a=document.createElement("span"),b=document.createElement("span");a.textContent="TOTAL SUPPLIES";b.textContent=fmtN(c.total);g.append(a,b);L.appendChild(g);
-supLogi(L,c.total);}
+if(c.fobs){const p=document.createElement("div");p.className="grand pre";const pa=document.createElement("span"),pb=document.createElement("span");pa.textContent="F.O.B. PRELOADED ("+fmtN(FOB_PRE)+" each)";pb.textContent="-"+fmtN(c.used);p.append(pa,pb);L.appendChild(p);
+const n2=document.createElement("div");n2.className="grand";n2.style.marginBottom="10px";const na=document.createElement("span"),nb=document.createElement("span");na.textContent="STILL NEEDED";nb.textContent=fmtN(c.need);n2.append(na,nb);L.appendChild(n2)}
+supLogi(L,c.need);}
 function updSupplies(){$("supTot").textContent=fmtN(supCalc().total);if(supOpen)supRender()}
 function supShow(){supOpen=true;supRender();$("supPanel").hidden=false;$("supClose").focus()}
 function supHide(){supOpen=false;$("supPanel").hidden=true}
@@ -1465,11 +1468,12 @@ const vbMsg=t=>{$("vbTxt").textContent=t};
 function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbSupply").hidden=true;$("vbAdmin").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
 function renderSupplyCard(){const c=$("vbSupply");c.textContent="";const wide=!!(window.matchMedia&&matchMedia("(min-width:900px)").matches);if(!wide){c.hidden=true;return}
 const sc=supCalc(),row=(a,b,cls)=>{const r=mk("div","","sRow"+(cls?" "+cls:""));r.append(mk("span",a),mk("span",b));return r};
-const hd=mk("div","","sHd");hd.append(mk("span","SUPPLIES","bcLbl"),mk("b",fmtN(sc.total)));c.append(hd);
+const hd=mk("div","","sHd");hd.append(mk("span","SUPPLIES","sTitle"),mk("b",fmtN(sc.total)));c.append(hd);
 c.append(mk("div","PLACED ITEMS","bcLbl"));if(!sc.P.length)c.append(mk("div","Nothing placed."));sc.P.forEach(r=>c.append(row(T[r.k].n+" x "+fmtN(r.n),r.c?fmtN(r.n*r.c):"free")));
-c.append(mk("div","LOGISTICS: WHAT TO BRING","bcLbl"));
-if(sc.total<=0)c.append(mk("div","Nothing to bring."));else{const pk=packSupplies(sc.total);pk.rows.filter(r=>r.q>0).forEach(r=>c.append(row(r.n+" x "+fmtN(r.q),fmtN(r.q*r.c))));
-if(pk.loose>0){const sl=Math.ceil(pk.loose/SLOT);c.append(row("Loose, "+sl+(sl===1?" slot":" slots"),fmtN(pk.loose)))}c.append(row("Total",fmtN(sc.total),"tot"));c.append(mk("div","Pallet 1,800, large crate 1,750 (35 slots), small crate 1,200 (24 slots), a slot is 50 supplies.","sNote"))}
+if(sc.fobs){c.append(row("F.O.B. preloaded ("+fmtN(FOB_PRE)+" each)","-"+fmtN(sc.used)));c.append(row("Still needed",fmtN(sc.need),"tot"))}
+c.append(mk("div","LOGISTICS","sTitle"));
+if(sc.need<=0)c.append(mk("div","Nothing needed."));else{const pk=packSupplies(sc.need);pk.rows.filter(r=>r.q>0).forEach(r=>c.append(row(r.n+" x "+fmtN(r.q),fmtN(r.q*r.c))));
+if(pk.loose>0){const sl=Math.ceil(pk.loose/SLOT);c.append(row("Loose, "+sl+(sl===1?" slot":" slots"),fmtN(pk.loose)))}c.append(row("Total",fmtN(sc.need),"tot"));c.append(mk("div","Pallet 1,800, large crate 1,750 (35 slots), small crate 1,200 (24 slots), a slot is 50 supplies.","sNote"))}
 c.hidden=false}
 function renderBuilderCard(d){const c=$("vbBuilder");c.textContent="";c.className="";if(!d||!d.uid||!d.by){c.hidden=true;return}
 const wide=!!(window.matchMedia&&matchMedia("(min-width:900px)").matches);c.style.top=($("viewBar").offsetHeight+8)+"px";c.hidden=false;

@@ -93,8 +93,12 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 .wfoot{margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted)}
 #viewBar{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--panel);border-bottom:2px solid var(--border);font-size:12px}
 #vbBuilder{position:absolute;right:8px;top:46px;z-index:5;max-width:260px;background:#d9cfae;color:#2a2618;border:2px solid #6b6139;padding:8px 11px;font-size:13px;line-height:1.45}
-#vbBuilder.full{width:400px;max-width:46vw;max-height:calc(100% - 100px);overflow:auto;padding:12px 16px;font-size:15px}.bcStamp{display:inline-block;font-size:15px;font-weight:bold;letter-spacing:4px;color:#a52a2a;border:2px double #a52a2a;padding:0 8px;transform:rotate(-3deg);margin-bottom:4px}
+#vbBuilder.full{width:400px;max-width:46vw;max-height:calc(50% - 56px);overflow:auto;padding:12px 16px;font-size:15px}.bcStamp{display:inline-block;font-size:15px;font-weight:bold;letter-spacing:4px;color:#a52a2a;border:2px double #a52a2a;padding:0 8px;transform:rotate(-3deg);margin-bottom:4px}
 .bcHd{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:4px}.bcBody{font-size:15px;line-height:1.5;border-top:1px dashed #2a2618;padding-top:5px}.bcBody p{margin:2px 0 6px;white-space:pre-wrap;word-break:break-word}.bcBody .bcLbl{margin-top:6px}.bcBody button{margin-top:10px;background:#2a2618;color:#d9cfae;border-color:#2a2618;padding:6px 12px;min-height:34px;font-size:14px}
+#vbSupply{position:absolute;right:8px;bottom:8px;z-index:5;width:400px;max-width:46vw;max-height:calc(50% - 24px);overflow:auto;background:#d9cfae;color:#2a2618;border:2px solid #6b6139;padding:12px 16px;font-size:15px;line-height:1.5}
+.sHd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid #2a2618;padding-bottom:3px;margin-bottom:4px}.sHd b{font-size:20px}
+.sRow{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted #6b6139}.sRow span:first-child{flex:1 1 auto;word-break:break-word}.sRow span:last-child{flex:0 0 auto}.sRow.tot{font-weight:bold;border-bottom:0}
+.sNote{font-size:12px;margin-top:4px}
 .bcLbl{font-size:11px;letter-spacing:3px}.bcName{display:block;font-size:20px;font-weight:bold;letter-spacing:1px;color:#2a2618;word-break:break-all}
 .bcSoc{margin-top:3px}.bcSoc a{color:#4a1f12;font-size:14px;word-break:break-all}
 #vbTxt{flex:1 1 200px;min-width:0;word-break:break-word}.vbBtns{display:flex;gap:6px}.vbBtns button{padding:5px 9px;min-height:32px}
@@ -147,7 +151,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bCopy" type="button">Copy</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bBox" type="button">Box select</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button></div><span id="st"></span></div>
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button>
-<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbAdmin" type="button" hidden>Delete post (admin)</button><button id="vbClose" type="button">Close</button></div></div><div id="vbBuilder" hidden></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
+<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name" hidden><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbAdmin" type="button" hidden>Delete post (admin)</button><button id="vbClose" type="button">Close</button></div></div><div id="vbBuilder" hidden></div><div id="vbSupply" hidden></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 
 <footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="boardPanel" hidden><div id="boardTop"><div class="k">INTEL BOARD</div><div id="boardBar"><input id="boardQ" placeholder="Search by title or builder" aria-label="Search the board"><button id="boardGo" type="button">Search</button><select id="boardSort" aria-label="Sort"><option value="new">Newest</option><option value="liked">Most liked</option></select><button id="boardClose" type="button">Close</button></div></div><div id="boardGrid"></div><div id="boardMsg" role="status"></div><button id="boardMore" type="button" hidden>Load more</button></div>
@@ -160,7 +164,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <p>Welcome, builder. Lay out your base in 3D before you build it in game.</p>
 <button class="wBtn" id="wNew">NEW BLUEPRINT<small>Start on an empty map and place your F.O.B.</small></button>
 <button class="wBtn" id="wLoadB">LOAD BLUEPRINT<small>Open a saved blueprint, or paste a share link or code.</small></button>
-<button class="wBtn" id="wBrowse">INTEL BOARD<small>Browse blueprints shared by other builders.</small></button>
+<button class="wBtn" id="wBrowse" disabled>INTEL BOARD<small id="wBrowseS">Login to browse community blueprints.</small></button>
 <button class="wBtn" id="wLogin" disabled><span id="wLoginT">LOGIN / REGISTER</span><small id="wLoginS">Save blueprints online and post to the Intel Board. Coming soon.</small></button>
 <div id="wAuthMsg" style="font-size:12px;color:var(--muted);margin:0 0 8px"></div>
 <div class="wfoot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Join the Discord</a> to report bugs or share ideas.</div>
@@ -1397,6 +1401,7 @@ if(r.status===404)return null;if(!r.ok)throw new Error("read "+r.status);const j
 const getProfileByUid=async uid=>{const p=await fsGetDoc("users/"+uid);return p&&{...p,uid}};
 async function getProfileByName(name){const u=await fsGetDoc("usernames/"+String(name).toLowerCase());return u&&u.uid?getProfileByUid(u.uid):null}
 function renderLogin(){const b=$("wLogin"),t=$("wLoginT"),s=$("wLoginS"),w=$("who");
+{const can=!!(authOn()&&authReady&&authUser);$("wBrowse").disabled=!can;$("wBrowseS").textContent=can?"Browse blueprints shared by other builders.":(authOn()&&!authReady?"Checking login...":"Login to browse community blueprints.");if(!can)boardHide()}
 if(!authOn()){b.disabled=true;t.textContent="LOGIN / REGISTER";s.textContent="Save blueprints online and post to the Intel Board. Coming soon.";w.textContent="";return}
 if(!authReady){b.disabled=true;t.textContent="LOGIN / REGISTER";s.textContent=authErr||"Connecting...";w.textContent="";return}
 b.disabled=false;
@@ -1404,7 +1409,7 @@ if(authUser){const nm=profile&&profile.username||authUser.displayName||"builder"
 else{t.textContent="LOGIN / REGISTER";s.textContent=IN_APP?"Open this page in Chrome or Safari to log in.":"Sign in with Google to save blueprints online and post to the Intel Board.";w.textContent=""}}
 function ensureSDK(){if(sdkP)return sdkP;sdkP=(async()=>{for(const f of["app","auth","firestore"])await loadScript("https://www.gstatic.com/firebasejs/"+FB_VER+"/firebase-"+f+"-compat.js");
 firebase.initializeApp({apiKey:CLOUD.apiKey,authDomain:CLOUD.authDomain||CLOUD.projectId+".firebaseapp.com",projectId:CLOUD.projectId});fbDb=firebase.firestore();
-await new Promise(res=>{let first=true;firebase.auth().onAuthStateChanged(async u=>{const real=u&&!u.isAnonymous?u:null;authUser=real;profile=null;adminOn=false;if(real){try{profile=await getProfileByUid(real.uid)}catch(e){}adminCheck(real)}authReady=true;renderLogin();if(real&&viewOnly&&vmeta)countView(vmeta.code,vmeta.doc);
+await new Promise(res=>{let first=true;firebase.auth().onAuthStateChanged(async u=>{const real=u&&!u.isAnonymous?u:null;authUser=real;profile=null;adminOn=false;if(real){try{profile=await getProfileByUid(real.uid)}catch(e){}adminCheck(real)}authReady=true;renderLogin();if(!real)boardHide();if(real&&viewOnly&&vmeta)countView(vmeta.code,vmeta.doc);
 if(real&&!profile&&!first)openMyProfile();if(first){first=false;res()}})})})();sdkP.catch(()=>{authErr="Sign-in is not available right now.";sdkP=null;renderLogin()});return sdkP}
 async function initAuth(){renderLogin();if(!authOn())return;setTimeout(()=>{ensureSDK().catch(()=>{})},2000)}
 const FVts=()=>firebase.firestore.FieldValue.serverTimestamp();
@@ -1457,7 +1462,15 @@ async function viewPublicByName(name){dsHead();profBody.append(mk("p","Retrievin
 
 /* ---- read-only shared page, remixing ---- */
 const vbMsg=t=>{$("vbTxt").textContent=t};
-function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbAdmin").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
+function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbSupply").hidden=true;$("vbAdmin").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
+function renderSupplyCard(){const c=$("vbSupply");c.textContent="";const wide=!!(window.matchMedia&&matchMedia("(min-width:900px)").matches);if(!wide){c.hidden=true;return}
+const sc=supCalc(),row=(a,b,cls)=>{const r=mk("div","","sRow"+(cls?" "+cls:""));r.append(mk("span",a),mk("span",b));return r};
+const hd=mk("div","","sHd");hd.append(mk("span","SUPPLIES","bcLbl"),mk("b",fmtN(sc.total)));c.append(hd);
+c.append(mk("div","PLACED ITEMS","bcLbl"));if(!sc.P.length)c.append(mk("div","Nothing placed."));sc.P.forEach(r=>c.append(row(T[r.k].n+" x "+fmtN(r.n),r.c?fmtN(r.n*r.c):"free")));
+c.append(mk("div","LOGISTICS: WHAT TO BRING","bcLbl"));
+if(sc.total<=0)c.append(mk("div","Nothing to bring."));else{const pk=packSupplies(sc.total);pk.rows.filter(r=>r.q>0).forEach(r=>c.append(row(r.n+" x "+fmtN(r.q),fmtN(r.q*r.c))));
+if(pk.loose>0){const sl=Math.ceil(pk.loose/SLOT);c.append(row("Loose, "+sl+(sl===1?" slot":" slots"),fmtN(pk.loose)))}c.append(row("Total",fmtN(sc.total),"tot"));c.append(mk("div","Pallet 1,800, large crate 1,750 (35 slots), small crate 1,200 (24 slots), a slot is 50 supplies.","sNote"))}
+c.hidden=false}
 function renderBuilderCard(d){const c=$("vbBuilder");c.textContent="";c.className="";if(!d||!d.uid||!d.by){c.hidden=true;return}
 const wide=!!(window.matchMedia&&matchMedia("(min-width:900px)").matches);c.style.top=($("viewBar").offsetHeight+8)+"px";c.hidden=false;
 const a=mk("a","@"+d.by,"bcName");a.href="#u/"+encodeURIComponent(d.by);a.onclick=e=>{e.preventDefault();viewPublicByName(d.by)};
@@ -1466,7 +1479,7 @@ c.className="full";const hd=mk("div","","bcHd");hd.append(mk("span","SUBJECT: ",
 getProfileByUid(d.uid).then(p=>{if(!(p&&vmeta&&vmeta.doc===d))return;body.textContent="";if(p.bio){body.append(mk("div","BRIEFING","bcLbl"),mk("p",p.bio,"bio"))}const soc=mk("div","","bcSoc");if(socialsInto(soc,p))body.append(mk("div","KNOWN CHANNELS","bcLbl"),soc);
 if(!p.bio&&!soc.children.length)body.append(mk("p","No details on file."));const full=mk("button","Open full file");full.type="button";full.onclick=()=>viewPublicByName(d.by);body.append(full)}).catch(()=>{body.textContent=""})}
 function enterView(r){if(ed)edDone();setTool(null);boxMode=false;$("bBox").className="";loadItems(r.arr);hist.length=0;viewOnly=true;vmeta={code:r.code,doc:r.doc};autoDirty=false;bpDirty=false;
-$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();renderBuilderCard(r.doc);$("vbAdmin").hidden=!(adminOn&&r.doc&&r.doc.uid);$("vbAdmin").textContent="Delete post (admin)";delete $("vbAdmin").dataset.arm;countView(r.code,r.doc)}
+$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();renderBuilderCard(r.doc);renderSupplyCard();$("vbAdmin").hidden=!(adminOn&&r.doc&&r.doc.uid);$("vbAdmin").textContent="Delete post (admin)";delete $("vbAdmin").dataset.arm;countView(r.code,r.doc)}
 async function exitView(){leaveView();profHide();const ok=await restoreAuto();if(!ok){items=[];sel=new Set();bpSaved=false;bpDirty=false;bpParent=null;bpPostCode="";$("bpName").value="";$("bpDesc").value="";rebuild();wShow(false)}autoDirty=false;renderShare();ui()}
 function doRemix(){if(!viewOnly||!vmeta)return;if(authUser&&!profile){openMyProfile();return}
 if(!(authUser&&profile)){vbMsg("Log in to remix this blueprint.");startLogin(vbMsg).then(ok=>{if(ok)vbMsg("Logged in. Press Remix again.")});return}
@@ -1518,7 +1531,7 @@ c.append(row);return c}
 async function boardLoad(reset){const s=bState;if(s.busy)return;s.busy=true;const grid=$("boardGrid"),msg=$("boardMsg");if(reset){grid.textContent="";s.cursor=null;s.done=false;s.shown=new Set()}
 msg.textContent="Loading...";try{const rows=await boardFetch();rows.forEach(p=>{if(!s.shown.has(p._id)){s.shown.add(p._id);grid.append(boardCard(p))}});
 msg.textContent=grid.children.length?"":(s.q?"No matching blueprints.":"Nothing on the board yet. Be the first to share a base.");$("boardMore").hidden=!!(s.done||s.q||s.mode==="liked")}catch(e){msg.textContent="The board could not be loaded right now."}s.busy=false}
-function boardOpen(){if(!cloudOn())return;setHdr();$("boardPanel").hidden=false;bState.mode="new";bState.q="";$("boardQ").value="";$("boardSort").value="new";boardLoad(true)}
+function boardOpen(){if(!cloudOn()||!authUser)return;setHdr();$("boardPanel").hidden=false;bState.mode="new";bState.q="";$("boardQ").value="";$("boardSort").value="new";boardLoad(true)}
 function boardHide(){$("boardPanel").hidden=true}
 $("boardClose").onclick=boardHide;$("boardMore").onclick=()=>boardLoad(false);$("wBrowse").onclick=boardOpen;
 $("boardSort").onchange=()=>{bState.mode=$("boardSort").value;bState.q="";$("boardQ").value="";boardLoad(true)};
@@ -1528,18 +1541,6 @@ for(let k=0;k<6;k++){const c=newCode(),bref=fbDb.collection("bps").doc(c);if((aw
 b.set(bref,{d:long,n:items.length,v:1,title,desc,uid:authUser.uid,by,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()});
 b.set(fbDb.collection("board").doc(c),{d:long,n:items.length,s:sup,title,titleLower:title.toLowerCase(),desc,uid:authUser.uid,by,byLower:by.toLowerCase(),t:FVts(),likes:0,views:0});await b.commit();bpPostCode=c;try{await fbDb.collection("users").doc(authUser.uid).collection("saves").doc(slugOf($("bpName").value.trim().slice(0,40))).update({post:c,t:FVts()})}catch(e){}renderShare();return c}throw new Error("busy")}
 async function updateBoardPost(title,desc){const long=await shareCode(),sup=Math.round(supCalc().total);await fbDb.collection("board").doc(bpPostCode).update({d:long,n:items.length,s:sup,title,titleLower:title.toLowerCase(),desc})}
-function viewPost(){const upd=!!bpPostCode;profShow("INTEL BOARD",upd?"UPDATE YOUR POST":"SHARE TO THE BOARD");
-profBody.append(mk("p",upd?"This replaces the base shown on your Intel Board post with your latest saved version. Likes and views are kept.":"This posts a snapshot of your saved blueprint on the Intel Board for everyone to see, with your username and a link to your profile."));
-const pv=mk("div","","dsPrev"),im=mk("img");im.alt="Preview of your base";im.src=isoUrl(items.map(i=>({t:i.t,x:i.x,y:i.y,r:i.r,l:i.l})),400,250);pv.append(im);profBody.append(pv);
-const ti=fld("Title","pbTitle",$("bpName").value.trim().slice(0,60),60),de=fld("Description (optional)","pbDesc",$("bpDesc").value,300,"",true),m=mk("div","","msgline"),row=mk("div","","shRow"),go=mk("button",upd?"Update post":"Post to the board"),nw=upd?mk("button","Post as new"):null,no=mk("button","Cancel");
-go.type=no.type="button";if(nw)nw.type="button";row.append(go);if(nw)row.append(nw);row.append(no);profBody.append(m,row);
-const done=t=>{m.textContent=t;go.hidden=true;if(nw)nw.hidden=true;no.textContent="Close"};
-const postNew=async btn=>{const title=ti.value.trim().slice(0,60);if(!title){m.textContent="Give it a title.";return}if(Date.now()-lastPost<30000){m.textContent="Please wait a moment before posting again.";return}
-const prev=bpPostCode;btn.disabled=true;m.textContent="Posting...";try{bpPostCode="";const c=await postToBoard(title,de.value.trim().slice(0,300));lastPost=Date.now();done("Posted. Its share code is "+c+".")}catch(e){bpPostCode=prev;m.textContent="Could not post. Try again.";btn.disabled=false}};
-no.onclick=profHide;
-go.onclick=upd?async()=>{const title=ti.value.trim().slice(0,60);if(!title){m.textContent="Give it a title.";return}go.disabled=true;m.textContent="Updating...";
-try{await updateBoardPost(title,de.value.trim().slice(0,300));done("Updated. Your Intel Board post now shows this version.")}catch(e){if(e&&e.code==="not-found"){bpPostCode="";renderShare();m.textContent="That post no longer exists. Close this and press Share to post it again."}else m.textContent="Could not update. Try again.";go.disabled=false}}:()=>postNew(go);
-if(nw)nw.onclick=()=>postNew(nw)}
 async function userBuilds(uid){if(!cloudOn())return[];const rows=await fsQuery({from:qFrom,where:{fieldFilter:{field:{fieldPath:"uid"},op:"EQUAL",value:{stringValue:uid}}},limit:50});rows.sort((a,b)=>String(b.t).localeCompare(String(a.t)));return rows}
 $("profClose").onclick=profHide;profPanel.addEventListener("pointerdown",e=>{if(e.target===profPanel)profHide()});
 $("who").onclick=()=>{if(authUser)openMyProfile()};
@@ -1558,12 +1559,11 @@ async function loadAny(c){try{const r=await decodeAny(c);return r?loadItems(r.ar
 async function openShared(raw){try{const r=await decodeAny(raw);if(!r)return false;enterView(r);return true}catch(e){return false}}
 function slugOf(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)||"blueprint"}
 const saveReady=()=>bpSaved&&!bpDirty;
-function renderShare(){const ready=saveReady();$("bSave").textContent=ready?(bpPostCode?"Update Intel Board post":"Share to Intel Board"):"Save blueprint";$("bLink").disabled=!ready||viewOnly;$("bSave").disabled=viewOnly;$("bpDesc").hidden=!(authUser&&profile)}
+function renderShare(){const ready=saveReady();$("bLink").disabled=!ready||viewOnly;$("bSave").disabled=viewOnly}
 const say=t=>{$("msg").textContent=t};
-async function shareBoard(){if(!(authUser&&profile)){say("Log in to share to the Intel Board. Use LOGIN / REGISTER in the menu.");startLogin(say);return}if(!cloudOn()){say("The Intel Board is not available right now.");return}viewPost()}
 $("bLink").onclick=async()=>{if(!saveReady()){say("Save the blueprint first, then you can get its share code.");return}
 const long=await shareCode(),name=$("bpName").value.trim().slice(0,40);let c=long,short=false,note="";
-if(cloudOn()){try{if(authUser&&profile&&fbDb){c=await sdkPutBp({d:long,n:items.length,v:1,title:name,desc:($("bpDesc").value||"").trim().slice(0,300),uid:authUser.uid,by:profile.username,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()})}else c=await cloudPut(long,name);short=true}catch(e){note="Could not reach the share server, so this is the long link. "}}
+if(bpPostCode&&authUser&&profile){c=bpPostCode;short=true}else if(cloudOn()){try{if(authUser&&profile&&fbDb){c=await sdkPutBp({d:long,n:items.length,v:1,title:name,desc:($("bpDesc").value||"").trim().slice(0,300),uid:authUser.uid,by:profile.username,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()})}else c=await cloudPut(long,name);short=true}catch(e){note="Could not reach the share server, so this is the long link. "}}
 const out=short?c:location.href.split("#")[0]+"#"+c;$("box").value=out;let ok=false;try{await navigator.clipboard.writeText(out);ok=true}catch(e){}
 say(note+(short?"Share code "+c+(ok?" copied. Type it in Menu, Load Blueprint.":". Copy it from the box."):(ok?"Link copied, ":"Copy the link from the box, ")+out.length+" characters."))};
 $("bLoad").onclick=async()=>{say((await openShared($("box").value))?"Opened.":"Could not read that code.")};
@@ -1607,19 +1607,42 @@ function wRow(L,name,small,onOpen,onDel,code){const r=document.createElement("di
 const o=document.createElement("button");o.textContent="Open";o.onclick=onOpen;const d=document.createElement("button");d.textContent="Delete";d.onclick=()=>{if(d.dataset.arm)onDel();else{d.dataset.arm="1";d.textContent="Sure?"}};r.append(nm,o,d);L.appendChild(r)}
 function wHeading(L,t){const h=document.createElement("div");h.className="k";h.style.cssText="margin:8px 0 4px";h.textContent=t;L.appendChild(h)}
 async function openSaved(code,name,extra){if(await loadAny(code)){leaveView();bpCur=name;$("bpName").value=name;$("bpDesc").value=String(extra&&extra.desc||"").slice(0,300);bpParent=extra&&extra.parent?{code:extra.parent,title:extra.parentTitle||"",by:extra.parentBy||""}:null;bpPostCode=extra&&typeof extra.post==="string"?extra.post.slice(0,5):"";bpSaved=true;bpDirty=false;autoDirty=false;renderShare();wHide();return true}$("wMsg").textContent="Could not read that blueprint.";return false}
-function renderBp(){const L=$("wList");L.textContent="";const acct=!!(authUser&&profile&&fbDb);
-if(acct){wHeading(L,"IN YOUR ACCOUNT");const lo=document.createElement("div");lo.textContent="Loading...";lo.style.cssText="font-size:12px;color:var(--muted)";L.appendChild(lo);
-fbDb.collection("users").doc(authUser.uid).collection("saves").orderBy("t","desc").limit(50).get().then(q=>{lo.remove();if(q.empty){const e=document.createElement("div");e.style.cssText="font-size:12px;color:var(--muted);margin:0 0 6px";e.textContent="Nothing saved in your account yet.";L.insertBefore(e,L.children[1]);return}
-const frag=document.createDocumentFragment();q.forEach(doc=>{const b=doc.data();wRow(frag,b.name,(b.n||0)+" items, "+(b.t&&b.t.toDate?b.t.toDate().toLocaleDateString():""),()=>openSaved(b.d,b.name,b),async()=>{try{await doc.ref.delete();renderBp()}catch(e){$("wMsg").textContent="Could not delete."}},b.d)});L.insertBefore(frag,L.children[1])}).catch(()=>{lo.textContent="Could not load your saved blueprints."});wHeading(L,"ON THIS DEVICE")}
-const a=bpList();if(!a.length){const d=document.createElement("div");d.style.cssText="font-size:12px;color:var(--muted);margin:0 0 8px";d.textContent=acct?"Nothing saved on this device.":"No saved blueprints yet. Save one from the planner with the Save blueprint button.";L.appendChild(d);return}
-a.forEach(b=>wRow(L,b.name,(b.n||0)+" items, "+new Date(b.t||0).toLocaleDateString(),()=>openSaved(b.code,b.name,null),()=>{bpStore(bpList().filter(x=>x.id!==b.id));renderBp()},b.code))}
-async function saveBp(){const name=$("bpName").value.trim().slice(0,40),desc=($("bpDesc").value||"").trim().slice(0,300);if(!name){say("Give the blueprint a name first.");return}
+function renderBp(){const L=$("wList");L.textContent="";const acct=!!(authUser&&profile&&fbDb),dev=bpList();
+const note=t=>{const d=document.createElement("div");d.style.cssText="font-size:12px;color:var(--muted);margin:0 0 8px";d.textContent=t;return d};
+const draw=(rows,problem)=>{L.textContent="";const names=new Set(rows.map(r=>r.name.toLowerCase())),codes=new Set(rows.map(r=>r.code));
+const all=[...rows,...dev.filter(b=>!names.has(b.name.toLowerCase())&&!codes.has(b.code)).map(b=>({name:b.name,code:b.code,n:b.n,ts:b.t||0,src:"dev",id:b.id}))].sort((x,y)=>(y.ts||0)-(x.ts||0));
+if(problem)L.appendChild(note(problem));
+if(!all.length){L.appendChild(note(acct?"Nothing saved yet.":"No saved blueprints yet. Save one from the planner with the Save button."));return}
+all.forEach(r=>wRow(L,r.name,(r.n||0)+" items, "+new Date(r.ts||0).toLocaleDateString()+(acct?(r.src==="acct"?", in your account":", on this device"):""),()=>openSaved(r.code,r.name,r.extra||null),async()=>{
+if(r.src==="acct"){try{await r.ref.delete()}catch(e){$("wMsg").textContent="Could not delete.";return}bpStore(bpList().filter(x=>x.name.toLowerCase()!==r.name.toLowerCase()&&x.code!==r.code))}else bpStore(bpList().filter(x=>x.id!==r.id));renderBp()},r.code))};
+if(!acct){draw([]);return}
+L.appendChild(note("Loading..."));
+fbDb.collection("users").doc(authUser.uid).collection("saves").orderBy("t","desc").limit(50).get().then(q=>{const rows=[];q.forEach(doc=>{const b=doc.data();rows.push({name:b.name,code:b.d,n:b.n,ts:b.t&&b.t.toDate?b.t.toDate().getTime():0,src:"acct",extra:b,ref:doc.ref})});draw(rows)}).catch(()=>draw([],"Could not load your account saves."))}
+async function saveBp(){const name=$("bpName").value.trim().slice(0,40),desc=($("bpDesc").value||"").trim().slice(0,300);if(!name){say("Give the blueprint a name first.");return false}
 const code=await shareCode();let where="on this device";
-if(authUser&&profile&&fbDb){try{await fbDb.collection("users").doc(authUser.uid).collection("saves").doc(slugOf(name)).set({name,d:code,n:items.length,desc,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",post:bpPostCode||"",t:FVts()});where="in your account"}catch(e){say("Could not save to your account. Try again.");return}}
-else{const a=bpList(),i=a.findIndex(b=>b.name.toLowerCase()===name.toLowerCase()),rec={id:i>=0?a[i].id:Date.now().toString(36),name,code,t:Date.now(),n:items.length};if(i>=0)a[i]=rec;else a.unshift(rec);if(!bpStore(a)){say("Could not save: this browser is blocking storage.");return}}
+if(authUser&&profile&&fbDb){try{await fbDb.collection("users").doc(authUser.uid).collection("saves").doc(slugOf(name)).set({name,d:code,n:items.length,desc,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",post:bpPostCode||"",t:FVts()});where="in your account"}catch(e){say("Could not save to your account. Try again.");return false}}
+else{const a=bpList(),i=a.findIndex(b=>b.name.toLowerCase()===name.toLowerCase()),rec={id:i>=0?a[i].id:Date.now().toString(36),name,code,t:Date.now(),n:items.length};if(i>=0)a[i]=rec;else a.unshift(rec);if(!bpStore(a)){say("Could not save: this browser is blocking storage.");return false}}
 bpCur=name;bpSaved=true;bpDirty=false;renderShare();
-say("Saved "+name+" "+where+"."+(bpParent?" This blueprint is built on "+bpParent.title+(bpParent.by?" by "+bpParent.by:"")+".":""))}
-$("bSave").onclick=()=>{if(viewOnly)return;if(saveReady())shareBoard();else saveBp()};$("bMenu").onclick=()=>wShow(true);[$("bpName"),$("bpDesc")].forEach(e=>e.addEventListener("input",()=>{bpDirty=true;renderShare()}));
+say("Saved "+name+" "+where+"."+(bpParent?" This blueprint is built on "+bpParent.title+(bpParent.by?" by "+bpParent.by:"")+".":""));return where}
+async function saveAndShare(){const where=await saveBp();if(!where)return{saved:false};
+if(!(authUser&&profile&&fbDb&&cloudOn()))return{saved:true,shared:false,local:true};
+const name=$("bpName").value.trim().slice(0,40),desc=($("bpDesc").value||"").trim().slice(0,300);
+try{if(bpPostCode){try{await updateBoardPost(name,desc);return{saved:true,shared:"updated",code:bpPostCode}}catch(e){if(!(e&&e.code==="not-found"))throw e;bpPostCode=""}}
+if(Date.now()-lastPost<30000)return{saved:true,shared:false,wait:true};
+const c=await postToBoard(name,desc);lastPost=Date.now();return{saved:true,shared:"new",code:c}}catch(e){return{saved:true,shared:false,failed:true}}}
+function openSave(){if(viewOnly)return;const acct=!!(authUser&&profile&&fbDb&&cloudOn());profShow("SAVE","SAVE BLUEPRINT");
+profBody.append(mk("p",acct?(bpPostCode?"Saves to your account and updates your Intel Board post.":"Saves to your account and shares it on the Intel Board."):"Saves on this device. Log in to keep it in your account and share it on the Intel Board."));
+const pv=mk("div","","dsPrev"),im=mk("img");im.alt="Preview of your base";im.src=isoUrl(items.map(i=>({t:i.t,x:i.x,y:i.y,r:i.r,l:i.l})),400,250);pv.append(im);profBody.append(pv);
+const ti=fld("Name","svName",$("bpName").value.trim().slice(0,40),40,"for example Hesco Corner"),de=acct?fld("Description (optional, shown on the Intel Board)","svDesc",$("bpDesc").value,300,"",true):null;
+const m=mk("div","","msgline"),row=mk("div","","shRow"),go=mk("button",acct?"Save and share to Intel Board":"Save"),no=mk("button","Cancel");go.type=no.type="button";row.append(go);
+if(!acct&&authOn()){const lg=mk("button","Log in");lg.type="button";lg.onclick=()=>startLogin(t=>{m.textContent=t});row.append(lg)}row.append(no);profBody.append(m,row);no.onclick=profHide;
+const finish=t=>{m.textContent=t;go.hidden=true;no.textContent="Close"};
+go.onclick=async()=>{const name=ti.value.trim().slice(0,40);if(!name){m.textContent="Give the blueprint a name first.";return}$("bpName").value=name;if(de)$("bpDesc").value=de.value.trim().slice(0,300);go.disabled=true;m.textContent=acct?"Saving and sharing...":"Saving...";
+try{const r=await saveAndShare();if(!r.saved){m.textContent=$("msg").textContent||"Could not save. Try again.";go.disabled=false;return}
+if(r.local)finish("Saved on this device.");else if(r.shared==="new")finish("Saved and shared to the Intel Board. Share code: "+r.code+".");else if(r.shared==="updated")finish("Saved. Your Intel Board post was updated. Share code: "+r.code+".");
+else if(r.wait){m.textContent="Saved to your account. New posts are limited to one every 30 seconds, press the button again in a moment to share it.";go.disabled=false}
+else{m.textContent="Saved to your account, but sharing failed. Press the button to try again.";go.disabled=false}}catch(e){m.textContent="Could not save. Try again.";go.disabled=false}}}
+$("bSave").onclick=()=>{if(viewOnly)return;openSave()};$("bMenu").onclick=()=>wShow(true);[$("bpName"),$("bpDesc")].forEach(e=>e.addEventListener("input",()=>{bpDirty=true;renderShare()}));
 $("wNew").onclick=()=>{leaveView();push();items=[];sel=new Set();tool=null;updGhost();bpCur="";$("bpName").value="";$("bpDesc").value="";bpParent=null;bpPostCode="";bpSaved=false;bpDirty=false;rebuild();wHide()};
 $("wLoadB").onclick=()=>wView("load");$("wLoadBack").onclick=()=>wView("main");$("wBack").onclick=wHide;
 $("wOpenCode").onclick=async()=>{if(!(await openShared($("wCode").value)))$("wMsg").textContent="Could not read that code."};

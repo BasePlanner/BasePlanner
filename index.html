@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
 <title>Wardogs Base Planner</title>
-<meta name="description" content="Plan your Wardogs base in 3D. Draw. Build. Defend. Place your F.O.B., stack Hesco walls, count supplies and share a 5-letter code.">
+<meta name="description" content="Plan your Wardogs base in 3D. Wardogs Base Builder. Place your F.O.B., stack Hesco walls, count supplies and share a 5-letter code.">
 <meta property="og:title" content="Wardogs Base Planner">
 <meta property="og:description" content="Plan your Wardogs base in 3D, count the supplies and share it with a 5-letter code.">
 <meta property="og:type" content="website">
@@ -82,6 +82,9 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #foot a,#wCard a{color:var(--acc)}
 .wfoot{margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted)}
 #viewBar{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--panel);border-bottom:2px solid var(--border);font-size:12px}
+#vbBuilder{position:absolute;right:8px;top:46px;z-index:5;max-width:220px;background:#d9cfae;color:#2a2618;border:2px solid #6b6139;padding:6px 9px;font-size:11px;line-height:1.4}
+.bcLbl{font-size:9px;letter-spacing:3px}.bcName{display:block;font-size:15px;font-weight:bold;letter-spacing:1px;color:#2a2618;word-break:break-all}
+.bcSoc{margin-top:3px}.bcSoc a{color:#4a1f12;font-size:11px;word-break:break-all}
 #vbTxt{flex:1 1 200px;min-width:0;word-break:break-word}.vbBtns{display:flex;gap:6px}.vbBtns button{padding:5px 9px;min-height:32px}
 #bpDesc{height:54px}
 #selBox{position:absolute;z-index:4;border:2px dashed var(--acc);background:rgba(155,173,82,.15);pointer-events:none}
@@ -99,7 +102,10 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 .wBtn:disabled{opacity:.6;cursor:default}
 #wList{max-height:240px;overflow:auto;margin:8px 0 10px}
 .wRow{display:flex;gap:6px;align-items:center;border:1.5px solid var(--border);background:var(--panel);padding:6px 8px;margin:0 0 6px}
-.wRow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wRow small{display:block;font-size:10px;color:var(--muted)}
+.wThumb{position:relative;width:120px;height:75px;flex:0 0 auto;background:#12150d;border:1px solid var(--border);color:var(--muted);font-size:10px;display:flex;align-items:center;justify-content:center}.wThumb img{display:block;width:100%;height:100%}
+.pms{position:absolute;left:2px;bottom:2px;font-size:9px;color:#9bad52;background:rgba(0,0,0,.65);padding:0 3px}
+.dsPrev{position:relative;border:2px solid #2a2618;background:#12150d;margin:8px 0}.dsPrev img{display:block;width:100%;height:auto}
+.wRow{flex-wrap:wrap}.wRow .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.wRow small{display:block;font-size:10px;color:var(--muted)}
 #wCard textarea{width:100%;min-width:0;height:56px}
 @supports(height:100dvh){html,body{height:100dvh}}
 *{-webkit-tap-highlight-color:transparent}
@@ -125,11 +131,11 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 #edRow{padding:0 10px 6px}#edRow button{min-height:38px}}
 @media (max-height:520px){header{padding:3px 10px}#bar{padding:3px 10px}}
 </style></head><body>
-<header><h1>BASE PLANNER 3D</h1><span class="tag">Draw. Build. Defend.</span><button id="who" type="button" style="margin-left:auto;font-size:12px;border:0;background:none;color:var(--acc);text-decoration:underline;min-height:0;padding:2px 4px"></button><button id="bMenu" style="margin-left:10px">Menu</button><label id="themeLbl" for="themeSel" style="margin-left:10px;font-size:12px;letter-spacing:1px;color:var(--muted)">THEMES</label><select id="themeSel"></select></header>
-<div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bCopy" type="button">Copy</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bBox" type="button">Box select</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button><select id="defSel"></select><button id="bDef">Edit default build</button></div><span id="st"></span></div>
+<header><h1>BASE PLANNER 3D</h1><span class="tag">Wardogs Base Builder</span><button id="who" type="button" style="margin-left:auto;font-size:12px;border:0;background:none;color:var(--acc);text-decoration:underline;min-height:0;padding:2px 4px"></button><button id="bMenu" style="margin-left:10px">Menu</button><label id="themeLbl" for="themeSel" style="margin-left:10px;font-size:12px;letter-spacing:1px;color:var(--muted)">THEMES</label><select id="themeSel"></select></header>
+<div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bCopy" type="button">Copy</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bBox" type="button">Box select</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button></div><span id="st"></span></div>
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button>
-<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbClose" type="button">Close</button></div></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
+<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbClose" type="button">Close</button></div></div><div id="vbBuilder" hidden></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 
 <footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="profPanel" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div id="profCard"><div class="k" id="profKicker">PROFILE</div><h2 id="profTitle">PROFILE</h2><div id="profBody"></div><button id="profClose" type="button">Close</button></div></div>
@@ -137,7 +143,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="welcome" role="dialog" aria-modal="true" aria-labelledby="wTitle" hidden>
 <div id="wCard">
 <div id="wMain">
-<div class="k">WARDOGS</div><h2 id="wTitle">BASE PLANNER</h2><div class="tag">Draw. Build. Defend.</div>
+<div class="k">WARDOGS</div><h2 id="wTitle">BASE PLANNER</h2><div class="tag">Wardogs Base Builder</div>
 <p>Welcome, builder. Lay out your base in 3D before you build it in game.</p>
 <button class="wBtn" id="wNew">NEW BLUEPRINT<small>Start on an empty map and place your F.O.B.</small></button>
 <button class="wBtn" id="wLoadB">LOAD BLUEPRINT<small>Open a saved blueprint, or paste a share link or code.</small></button>
@@ -1014,7 +1020,7 @@ function dec(a){const o=[];(Array.isArray(a)?a:[]).forEach(v=>{const k=String(v[
 if(k==="hb2"){o.push({k:"hb1",x,y,z,h:2,r:0});return}if(!T[k]||!isFinite(x)||!isFinite(y))return;o.push({k,x,y,z,h:clamp(+v[4]||1,1,2),r:(((+v[5]||0)%4)+4)%4})});return o}
 function parseDef(c){try{const o=JSON.parse(atob(c.trim())),r={};for(const t in o)if(T[t]&&T[t].ed)r[t]=dec(o[t]);return r}catch(e){return null}}
 const BAKED=parseDef(BAKED_CODE)||{};let DEF=parseDef(BAKED_CODE)||{};
-try{const c=localStorage.getItem("wd_def"),o=c&&parseDef(c);if(o)for(const t in o)if(o[t].length)DEF[t]=o[t]}catch(e){}
+
 const saveDef=()=>{try{localStorage.setItem("wd_def",btoa(JSON.stringify(Object.fromEntries(Object.entries(DEF).map(([t,p])=>[t,enc(p)])))))}catch(e){}};
 const sameParts=(a,b)=>JSON.stringify(enc(a||[]))===JSON.stringify(enc(b||[])),defEdited=t=>!sameParts(DEF[t],BAKED[t]);
 function partsOf(it){if(ed&&it===ed.item)return ed.parts;if(!T[it.t].ed)return null;return it.parts||DEF[it.t]||[]}
@@ -1029,7 +1035,6 @@ function w2lCell(it,cx,cy){const W=Math.floor(T[it.t].w),H=Math.floor(T[it.t].h)
 let ed=null,edStroke=null,edR=null,edGhost=null;const editG=new THREE.Group();scene.add(editG);
 const EDK=["hb1","hbt","bremer","hedge","sandbag","door",...ORDER.filter(k=>!["fob","bunker","shelter","tower","hb1","hbt","bremer","hedge","door"].includes(k))];
 EDK.forEach(k=>{const b=document.createElement("button");b.dataset.k=k;b.innerHTML=T[k].n+"<small>"+T[k].w+"\u00D7"+T[k].h+"</small>";b.onclick=()=>{if(ed){ed.sel=k;edSetGhost();edPalUi()}};$("edPal").appendChild(b)});
-Object.keys(T).filter(k=>T[k].ed).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=T[k].n;$("defSel").appendChild(o)});
 const edPalUi=()=>document.querySelectorAll("#edPal button").forEach(b=>b.className=ed&&b.dataset.k===ed.sel?"on":"");
 const edSnap=()=>JSON.stringify(enc(ed.parts));
 function edFrame(){const it=ed.item,[w,h]=dims(it.t,it.r);frameTo(it.x+w/2,it.y+h/2,Math.max(w,h)*0.95);const dy=((it.l||1)-1)*LH;ctl.target.y+=dy;cam.position.y+=dy;ctl.update()}
@@ -1123,7 +1128,7 @@ function endDrag(e){if(bx&&bx.active&&e&&e.type==="pointerup")finishBox();bx=nul
 $("bBox").onclick=()=>{if(ed)return;if(tool)setTool(null);boxMode=!boxMode;$("bBox").className=boxMode?"on":"";ui()};
 $("bCopy").onclick=copySel;
 $("bParts").onclick=()=>{const it=sel.size===1&&items.find(i=>sel.has(i.id));if(it&&T[it.t].ed)openEd("item",it.id)};
-$("bDef").onclick=()=>openEd("default",null,$("defSel").value);
+
 const PAINT=new Set(["hb1","hbt","hwall","bremer"]);let stroke=null,rstroke=null,ghostKey="",pan=null;const keys={};
 let supOpen=false;
 const fmtN=n=>n.toLocaleString("en-US");
@@ -1209,7 +1214,7 @@ $("hHead").onclick=()=>{helpOpen=!helpOpen;renderHelp()};
 function ui(){const hk=ed?"e":"n";if(hk!==helpKey){helpKey=hk;renderHelp()}$("bSel").className=tool?"":"on";$("bHalf").textContent=["Grid","Half-Grid","Free Place"][gmode];$("bHalf").className=gmode?"on":"";
 document.querySelectorAll("#pal button").forEach(b=>{b.disabled=(!fobs().length&&b.dataset.t!=="fob")||viewOnly;b.className=b.dataset.t===tool?"on":""});
 const one=sel.size===1?items.find(i=>sel.has(i.id)):null;
-$("bParts").disabled=!!ed||!(one&&T[one.t].ed);$("bCopy").disabled=!!ed||!(sel.size&&items.some(i=>sel.has(i.id)&&i.t!=="fob"));$("bBox").disabled=!!ed;{const vo=viewOnly;["bUndo","bRot","bDel","bSel"].forEach(id=>$(id).disabled=vo);["bCopy","bBox","bParts","bDef","defSel"].forEach(id=>{$(id).disabled=$(id).disabled||vo})}$("bDef").disabled=!!ed;$("defSel").disabled=!!ed;
+$("bParts").disabled=!!ed||!(one&&T[one.t].ed);$("bCopy").disabled=!!ed||!(sel.size&&items.some(i=>sel.has(i.id)&&i.t!=="fob"));$("bBox").disabled=!!ed;{const vo=viewOnly;["bUndo","bRot","bDel","bSel"].forEach(id=>$(id).disabled=vo);["bCopy","bBox","bParts"].forEach(id=>{$(id).disabled=$(id).disabled||vo})}
 $("st").textContent=ed?"Editing "+T[ed.t].n+(ed.mode==="default"?" · default build":" parts")+" · level "+(ed.z+1):!fobs().length?"Place your F.O.B.":(free?"Free place ON · ":half?"Half-grid ON · ":"")+(tool?"Placing: "+(clip&&clip.group?clip.group.items.length+" items":T[tool].n)+(clip?" (copy)":""):one?"Selected: "+T[one.t].n:sel.size?sel.size+" selected":"");
 }
 ORDER.forEach(k=>{const b=document.createElement("button");b.dataset.t=k;b.innerHTML=T[k].n+"<small>"+subTxt(k)+"</small>";b.onclick=()=>setTool(tool===k?null:k);$("pal").appendChild(b)});
@@ -1434,9 +1439,12 @@ async function viewPublicByName(name){dsHead();profBody.append(mk("p","Retrievin
 
 /* ---- read-only shared page, remixing ---- */
 const vbMsg=t=>{$("vbTxt").textContent=t};
-function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;hist.length=0}
+function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
+function renderBuilderCard(d){const c=$("vbBuilder");c.textContent="";if(!d||!d.uid||!d.by){c.hidden=true;return}
+c.style.top=($("viewBar").offsetHeight+8)+"px";c.hidden=false;c.append(mk("div","BUILDER","bcLbl"));const a=mk("a","@"+d.by,"bcName");a.href="#u/"+encodeURIComponent(d.by);a.onclick=e=>{e.preventDefault();viewPublicByName(d.by)};c.append(a);
+const soc=mk("div","","bcSoc");c.append(soc);getProfileByUid(d.uid).then(p=>{if(p&&vmeta&&vmeta.doc===d)socialsInto(soc,p)}).catch(()=>{})}
 function enterView(r){if(ed)edDone();setTool(null);boxMode=false;$("bBox").className="";loadItems(r.arr);hist.length=0;viewOnly=true;vmeta={code:r.code,doc:r.doc};autoDirty=false;bpDirty=false;
-$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();showBlueprintFile()}
+$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();renderBuilderCard(r.doc);showBlueprintFile()}
 async function exitView(){leaveView();profHide();const ok=await restoreAuto();if(!ok){items=[];sel=new Set();bpSaved=false;bpDirty=false;bpParent=null;$("bpName").value="";$("bpDesc").value="";rebuild();wShow(false)}autoDirty=false;renderShare();ui()}
 function doRemix(){if(!viewOnly||!vmeta)return;if(authUser&&!profile){openMyProfile();return}
 if(!(authUser&&profile)){vbMsg("Log in to remix this blueprint.");startLogin(vbMsg).then(ok=>{if(ok)vbMsg("Logged in. Press Remix again.")});return}
@@ -1445,6 +1453,7 @@ leaveView();profHide();bpSaved=false;bpDirty=true;$("bpName").value=("Remix of "
 say("Remix started. Save it to keep your changes."+(bpParent?" It will be credited as built on "+bpParent.title+(bpParent.by?" by "+bpParent.by:"")+".":""))}
 function showBlueprintFile(){if(!vmeta)return;const d=vmeta.doc||{};dsHead("BLUEPRINT FILE");profBody.firstChild.append(mk("span",vmeta.code?"CODE "+vmeta.code:"SHARED LINK"));
 const sub=mk("div","","dsSubj");sub.append(mk("div","BLUEPRINT","dsLbl"),mk("h2",d.title||"Shared blueprint","dsName"));profBody.append(sub);
+{const pv=mk("div","","dsPrev"),im=mk("img"),t0=performance.now();im.alt="Top-down preview of the base";im.src=isoUrl(items.map(i=>({t:i.t,x:i.x,y:i.y,r:i.r,l:i.l})),400,250);pv.append(im);if(perfOn)pv.append(mk("span","drawn in "+(performance.now()-t0).toFixed(1)+" ms","pms"));profBody.append(pv)}
 const meta=mk("div","","dsMeta");meta.append(mk("div","ITEMS: "+items.length+"   SUPPLIES: "+fmtN(supCalc().total)));if(d.t)meta.append(mk("div","FILED: "+fmtDate(d.t)));profBody.append(meta);
 dsSection("BUILDER");const bw=mk("div","","socials");if(d.by){const a=mk("a","@"+d.by);a.href="#u/"+encodeURIComponent(d.by);a.onclick=e=>{e.preventDefault();viewPublicByName(d.by)};bw.append(a)}else bw.append(mk("div","UNKNOWN BUILDER"));profBody.append(bw);
 dsSection("BRIEFING");if(d.desc)profBody.append(mk("p",d.desc,"bio"));else{const r=mk("p","","bio");r.append(redacted(18)," ",redacted(9));profBody.append(r)}
@@ -1488,16 +1497,44 @@ const bpStore=a=>{try{localStorage.setItem("wd_bps",JSON.stringify(a));return tr
 function wView(v){$("wMain").hidden=v!=="main";$("wLoad").hidden=v!=="load";if(v==="load"){$("wMsg").textContent="";renderBp()}}
 function wShow(fromMenu){wOpen=true;setHdr();$("welcome").hidden=false;$("wBack").hidden=!fromMenu;wView("main");$("wNew").focus()}
 function wHide(){wOpen=false;$("welcome").hidden=true}
-function wRow(L,name,small,onOpen,onDel){const r=document.createElement("div");r.className="wRow";const nm=document.createElement("div");nm.className="nm";nm.textContent=name;const sm=document.createElement("small");sm.textContent=small;nm.appendChild(sm);
+/* ---- isometric preview, drawn in the browser from the blueprint itself (no pictures are stored) ---- */
+const PCOL={hb1:"#b3a66c",hbt:"#b3a66c",hwall:"#b3a66c",bremer:"#8d8f8c",hedge:"#7d8084",gate:"#6b4a2a",wire:"#9a9a9a",bunker:"#667540",shelter:"#76854a",tower:"#8a9358",loud:"#7d8a92",radio:"#8a7a55",mortar:"#9a4a3a",sam:"#a85a3a",ciws:"#b0643f",sting:"#a05040",oil:"#6f7d86",refuel:"#7b6a4f",repair:"#7b6a4f",tent:"#4f6b3a",door:"#6b4a2a",fob:"#6f7a45",sandbag:"#8d8458"};
+const pShade=(hex,f)=>{const n=parseInt(hex.slice(1),16),c=k=>Math.min(255,Math.round(((n>>k)&255)*f));return "rgb("+c(16)+","+c(8)+","+c(0)+")"};
+const PVH=h=>Math.min(h,5);
+function isoDraw(list,W,H){const dpr=Math.min(window.devicePixelRatio||1,2),cv=document.createElement("canvas");cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);const g=cv.getContext("2d");g.scale(dpr,dpr);
+g.fillStyle="#12150d";g.fillRect(0,0,W,H);g.strokeStyle="#1f2616";g.lineWidth=1;for(let x=0;x<W;x+=18){g.beginPath();g.moveTo(x+.5,0);g.lineTo(x+.5,H);g.stroke()}for(let y=0;y<H;y+=18){g.beginPath();g.moveTo(0,y+.5);g.lineTo(W,y+.5);g.stroke()}
+let L=list.filter(i=>T[i.t]);if(L.length>2000)L=L.filter(i=>{const [w,h]=dims(i.t,i.r);return w*h>1||i.t==="fob"});if(!L.length)return cv;
+let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+L.forEach(it=>{const [w,h]=dims(it.t,it.r),z0=((it.l||1)-1)*1.1,ht=PVH(T[it.t].y);for(const cx of[0,w])for(const cy of[0,h]){const X=(it.x+cx-(it.y+cy))*0.866,Y=((it.x+cx)+(it.y+cy))*0.5;for(const z of[z0,z0+ht]){const yy=Y-z*0.55;x0=Math.min(x0,X);x1=Math.max(x1,X);y0=Math.min(y0,yy);y1=Math.max(y1,yy)}}});
+const pad=10,s=Math.min((W-2*pad)/Math.max(x1-x0,1e-6),(H-2*pad)/Math.max(y1-y0,1e-6)),ox=pad+(W-2*pad-(x1-x0)*s)/2-x0*s,oy=pad+(H-2*pad-(y1-y0)*s)/2-y0*s;
+const P=(x,y,z)=>[ox+(x-y)*0.866*s,oy+((x+y)*0.5-z*0.55)*s];
+const poly=(pts,fill,edge)=>{g.beginPath();pts.forEach((p,k)=>k?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.fillStyle=fill;g.fill();g.strokeStyle=edge;g.lineWidth=1;g.stroke()};
+const line=(a,b,col,w)=>{g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.strokeStyle=col;g.lineWidth=w;g.stroke()};
+L.map(i=>{const [w,h]=dims(i.t,i.r);return{i,w,h,k:i.x+i.y+w+h}}).sort((a,b)=>a.k-b.k||(a.i.l||1)-(b.i.l||1)).forEach(({i:it,w,h})=>{const x=it.x,y=it.y,z0=((it.l||1)-1)*1.1,ht=PVH(T[it.t].y),c=PCOL[it.t]||"#8a8f8a";
+if(it.t==="hedge"){line(P(x,y,z0),P(x+1,y+1,z0),c,2);line(P(x+1,y,z0),P(x,y+1,z0),c,2);return}
+if(it.t==="wire"){line(P(x,y+.5,z0+.5),P(x+w,y+.5,z0+.5),c,1);return}
+poly([P(x,y+h,z0),P(x+w,y+h,z0),P(x+w,y+h,z0+ht),P(x,y+h,z0+ht)],pShade(c,.62),pShade(c,.45));
+poly([P(x+w,y,z0),P(x+w,y+h,z0),P(x+w,y+h,z0+ht),P(x+w,y,z0+ht)],pShade(c,.48),pShade(c,.4));
+const top=[P(x,y,z0+ht),P(x+w,y,z0+ht),P(x+w,y+h,z0+ht),P(x,y+h,z0+ht)];poly(top,c,pShade(c,.7));
+if(it.t==="fob"){const m=[(top[0][0]+top[2][0])/2,(top[0][1]+top[2][1])/2];g.beginPath();g.ellipse(m[0],m[1],5,3,0,0,6.283);g.strokeStyle="#cfd1a8";g.lineWidth=1;g.stroke()}});
+return cv}
+const isoUrl=(list,W,H)=>isoDraw(list,W,H).toDataURL("image/png");
+const PCACHE=new Map(),perfOn=/[?&]perf\b/.test(location.search);
+async function previewFor(code,W,H){const key=W+"x"+H+"|"+code;if(PCACHE.has(key))return PCACHE.get(key);const t0=performance.now(),arr=await decodeBody(code),list=arr.map(v=>({t:v[0],x:+v[1],y:+v[2],r:(+v[3])%4,l:+v[5]||1})),url=isoUrl(list,W,H);
+const r={url,ms:performance.now()-t0,n:list.length};PCACHE.set(key,r);return r}
+function lazyPreview(box,code,W,H){const img=document.createElement("img");img.alt="Preview of the base";img.width=W;img.height=H;box.appendChild(img);
+const go=()=>previewFor(code,W,H).then(r=>{img.src=r.url;if(perfOn){const p=document.createElement("span");p.className="pms";p.textContent=r.n+" items, "+r.ms.toFixed(1)+" ms";box.appendChild(p)}}).catch(()=>{box.textContent="No preview"});
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();go()}});io.observe(box)}else go()}
+function wRow(L,name,small,onOpen,onDel,code){const r=document.createElement("div");r.className="wRow";if(code){const th=document.createElement("div");th.className="wThumb";lazyPreview(th,code,120,75);r.appendChild(th)}const nm=document.createElement("div");nm.className="nm";nm.textContent=name;const sm=document.createElement("small");sm.textContent=small;nm.appendChild(sm);
 const o=document.createElement("button");o.textContent="Open";o.onclick=onOpen;const d=document.createElement("button");d.textContent="Delete";d.onclick=()=>{if(d.dataset.arm)onDel();else{d.dataset.arm="1";d.textContent="Sure?"}};r.append(nm,o,d);L.appendChild(r)}
 function wHeading(L,t){const h=document.createElement("div");h.className="k";h.style.cssText="margin:8px 0 4px";h.textContent=t;L.appendChild(h)}
 async function openSaved(code,name,extra){if(await loadAny(code)){leaveView();bpCur=name;$("bpName").value=name;$("bpDesc").value=String(extra&&extra.desc||"").slice(0,300);bpParent=extra&&extra.parent?{code:extra.parent,title:extra.parentTitle||"",by:extra.parentBy||""}:null;bpSaved=true;bpDirty=false;autoDirty=false;renderShare();wHide();return true}$("wMsg").textContent="Could not read that blueprint.";return false}
 function renderBp(){const L=$("wList");L.textContent="";const acct=!!(authUser&&profile&&fbDb);
 if(acct){wHeading(L,"IN YOUR ACCOUNT");const lo=document.createElement("div");lo.textContent="Loading...";lo.style.cssText="font-size:12px;color:var(--muted)";L.appendChild(lo);
 fbDb.collection("users").doc(authUser.uid).collection("saves").orderBy("t","desc").limit(50).get().then(q=>{lo.remove();if(q.empty){const e=document.createElement("div");e.style.cssText="font-size:12px;color:var(--muted);margin:0 0 6px";e.textContent="Nothing saved in your account yet.";L.insertBefore(e,L.children[1]);return}
-const frag=document.createDocumentFragment();q.forEach(doc=>{const b=doc.data();wRow(frag,b.name,(b.n||0)+" items, "+(b.t&&b.t.toDate?b.t.toDate().toLocaleDateString():""),()=>openSaved(b.d,b.name,b),async()=>{try{await doc.ref.delete();renderBp()}catch(e){$("wMsg").textContent="Could not delete."}})});L.insertBefore(frag,L.children[1])}).catch(()=>{lo.textContent="Could not load your saved blueprints."});wHeading(L,"ON THIS DEVICE")}
+const frag=document.createDocumentFragment();q.forEach(doc=>{const b=doc.data();wRow(frag,b.name,(b.n||0)+" items, "+(b.t&&b.t.toDate?b.t.toDate().toLocaleDateString():""),()=>openSaved(b.d,b.name,b),async()=>{try{await doc.ref.delete();renderBp()}catch(e){$("wMsg").textContent="Could not delete."}},b.d)});L.insertBefore(frag,L.children[1])}).catch(()=>{lo.textContent="Could not load your saved blueprints."});wHeading(L,"ON THIS DEVICE")}
 const a=bpList();if(!a.length){const d=document.createElement("div");d.style.cssText="font-size:12px;color:var(--muted);margin:0 0 8px";d.textContent=acct?"Nothing saved on this device.":"No saved blueprints yet. Save one from the planner with the Save blueprint button.";L.appendChild(d);return}
-a.forEach(b=>wRow(L,b.name,(b.n||0)+" items, "+new Date(b.t||0).toLocaleDateString(),()=>openSaved(b.code,b.name,null),()=>{bpStore(bpList().filter(x=>x.id!==b.id));renderBp()}))}
+a.forEach(b=>wRow(L,b.name,(b.n||0)+" items, "+new Date(b.t||0).toLocaleDateString(),()=>openSaved(b.code,b.name,null),()=>{bpStore(bpList().filter(x=>x.id!==b.id));renderBp()},b.code))}
 async function saveBp(){const name=$("bpName").value.trim().slice(0,40),desc=($("bpDesc").value||"").trim().slice(0,300);if(!name){say("Give the blueprint a name first.");return}
 const code=await shareCode();let where="on this device";
 if(authUser&&profile&&fbDb){try{await fbDb.collection("users").doc(authUser.uid).collection("saves").doc(slugOf(name)).set({name,d:code,n:items.length,desc,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()});where="in your account"}catch(e){say("Could not save to your account. Try again.");return}}

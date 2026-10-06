@@ -81,6 +81,9 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #foot{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:2px 14px;padding:4px 12px 6px;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
 #foot a,#wCard a{color:var(--acc)}
 .wfoot{margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted)}
+#viewBar{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--panel);border-bottom:2px solid var(--border);font-size:12px}
+#vbTxt{flex:1 1 200px;min-width:0;word-break:break-word}.vbBtns{display:flex;gap:6px}.vbBtns button{padding:5px 9px;min-height:32px}
+#bpDesc{height:54px}
 #selBox{position:absolute;z-index:4;border:2px dashed var(--acc);background:rgba(155,173,82,.15);pointer-events:none}
 #welcome{position:fixed;left:0;right:0;bottom:0;top:var(--hdr,48px);z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
 #welcome::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:28px 28px;opacity:.14;pointer-events:none}
@@ -126,7 +129,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bCopy" type="button">Copy</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bBox" type="button">Box select</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button><select id="defSel"></select><button id="bDef">Edit default build</button></div><span id="st"></span></div>
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button>
-<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
+<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbClose" type="button">Close</button></div></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 
 <footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="profPanel" role="dialog" aria-modal="true" aria-labelledby="profTitle" hidden><div id="profCard"><div class="k" id="profKicker">PROFILE</div><h2 id="profTitle">PROFILE</h2><div id="profBody"></div><button id="profClose" type="button">Close</button></div></div>
@@ -167,9 +170,9 @@ repair:{n:"Vehicle repair station",w:2,h:2,y:1.5,c:0xb03a3a},tent:{n:"Recon tent
 const COST={hb1:15,hbt:22,hwall:75,bremer:15,hedge:22,gate:85,wire:7,bunker:100,shelter:100,tower:100,loud:100,radio:20,mortar:150,sam:1000,ciws:1500,sting:150,oil:2250,refuel:200,repair:200,tent:7,door:22,sandbag:15,fob:0};
 const subTxt=k=>T[k].w+"\u00D7"+T[k].h+(COST[k]?" \u00B7 "+COST[k]+" supplies":"");
 const ORDER=["fob","hb1","hbt","hwall","bremer","hedge","gate","wire","bunker","shelter","tower","loud","radio","mortar","sam","ciws","sting","oil","refuel","repair","tent","door"];
-let items=[],sel=new Set(),tool=null,trot=0,half=false,lvl=1,nid=1,hist=[],hover=null,plan=true,down=null,free=false,gmode=0,armDel=false,lastSig="",badMsg="",autoDirty=false,clip=null,clipSeq=0,mv=null,bx=null,boxMode=false;
+let items=[],sel=new Set(),tool=null,trot=0,half=false,lvl=1,nid=1,hist=[],hover=null,plan=true,down=null,free=false,gmode=0,armDel=false,lastSig="",badMsg="",autoDirty=false,clip=null,clipSeq=0,mv=null,bx=null,boxMode=false,viewOnly=false,bpDirty=false,bpSaved=false,bpParent=null,vmeta=null;
 const dims=(t,r)=>r%2?[T[t].h,T[t].w]:[T[t].w,T[t].h],clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),step=()=>half?.5:1,q=v=>free?v:Math.round(v/step())*step();
-const push=()=>{autoDirty=true;hist.push(items.map(i=>({...i})));if(hist.length>100)hist.shift()};
+const push=()=>{autoDirty=true;bpDirty=true;hist.push(items.map(i=>({...i})));if(hist.length>100)hist.shift()};
 const THEMES={
 olive:{n:"Vanguard",sb:"#12150d",gr:"#20271a",mi:"#2a3320",ma:"#3c482a",ac:"#9bad52",lh:0.62,ld:0.6},
 light:{n:"Map Table",sb:"#cfc9a4",gr:"#e2dcbc",mi:"#bdb890",ma:"#8f8a63",ac:"#5d6b2e",lh:0.8,ld:0.7},
@@ -991,7 +994,7 @@ const parts=[];byMat.forEach((list,mat)=>{let names=null;list=list.map(g=>g.inde
 if(!names.includes("position")||!names.includes("normal"))return;list.forEach(g=>Object.keys(g.attributes).forEach(k=>{if(!names.includes(k))g.deleteAttribute(k)}));
 const mg=THREE.BufferGeometryUtils.mergeBufferGeometries(list,false);if(!mg)return;const im=new THREE.InstancedMesh(mg,mat,CAP0);im.frustumCulled=false;im.count=0;scene.add(im);parts.push(im)});
 const ex=new THREE.Group();scene.add(ex);INS[t]={parts,extras,ex,cap:CAP0};return INS[t]}
-function rebuild(){armDel=false;if(autoDirty)scheduleAuto();updSupplies();const sig=fobs().map(f=>f.id+","+f.x+","+f.y).join("|");if(sig!==lastSig){lastSig=sig;drawZones();frameAuto()}
+function rebuild(){armDel=false;if(autoDirty)scheduleAuto();updSupplies();renderShare();const sig=fobs().map(f=>f.id+","+f.x+","+f.y).join("|");if(sig!==lastSig){lastSig=sig;drawZones();frameAuto()}
 const per={},addI=(t,M)=>(per[t]=per[t]||[]).push(M);
 (ed?[ed.item]:items).forEach(it=>{const ps=partsOf(it);if(ps){addI(it.t+"Shell",itemMat(it));ps.forEach(p=>addI(partKind(p),partMat(it,p)))}else addI(it.t,itemMat(it))});
 Object.keys(per).forEach(t=>getIns(t));
@@ -1204,9 +1207,9 @@ let helpOpen=innerWidth>640,helpKey="";
 function renderHelp(){$("hHead").textContent=(ed?"PART EDITOR ":"CONTROLS ")+(helpOpen?"\u25BE":"\u25B8");$("hBody").hidden=!helpOpen;$("hBody").innerHTML=ed?(TOUCH?HELP_ET:HELP_E):(TOUCH?HELP_T:HELP_N)}
 $("hHead").onclick=()=>{helpOpen=!helpOpen;renderHelp()};
 function ui(){const hk=ed?"e":"n";if(hk!==helpKey){helpKey=hk;renderHelp()}$("bSel").className=tool?"":"on";$("bHalf").textContent=["Grid","Half-Grid","Free Place"][gmode];$("bHalf").className=gmode?"on":"";
-document.querySelectorAll("#pal button").forEach(b=>{b.disabled=!fobs().length&&b.dataset.t!=="fob";b.className=b.dataset.t===tool?"on":""});
+document.querySelectorAll("#pal button").forEach(b=>{b.disabled=(!fobs().length&&b.dataset.t!=="fob")||viewOnly;b.className=b.dataset.t===tool?"on":""});
 const one=sel.size===1?items.find(i=>sel.has(i.id)):null;
-$("bParts").disabled=!!ed||!(one&&T[one.t].ed);$("bCopy").disabled=!!ed||!(sel.size&&items.some(i=>sel.has(i.id)&&i.t!=="fob"));$("bBox").disabled=!!ed;$("bDef").disabled=!!ed;$("defSel").disabled=!!ed;
+$("bParts").disabled=!!ed||!(one&&T[one.t].ed);$("bCopy").disabled=!!ed||!(sel.size&&items.some(i=>sel.has(i.id)&&i.t!=="fob"));$("bBox").disabled=!!ed;{const vo=viewOnly;["bUndo","bRot","bDel","bSel"].forEach(id=>$(id).disabled=vo);["bCopy","bBox","bParts","bDef","defSel"].forEach(id=>{$(id).disabled=$(id).disabled||vo})}$("bDef").disabled=!!ed;$("defSel").disabled=!!ed;
 $("st").textContent=ed?"Editing "+T[ed.t].n+(ed.mode==="default"?" · default build":" parts")+" · level "+(ed.z+1):!fobs().length?"Place your F.O.B.":(free?"Free place ON · ":half?"Half-grid ON · ":"")+(tool?"Placing: "+(clip&&clip.group?clip.group.items.length+" items":T[tool].n)+(clip?" (copy)":""):one?"Selected: "+T[one.t].n:sel.size?sel.size+" selected":"");
 }
 ORDER.forEach(k=>{const b=document.createElement("button");b.dataset.t=k;b.innerHTML=T[k].n+"<small>"+subTxt(k)+"</small>";b.onclick=()=>setTool(tool===k?null:k);$("pal").appendChild(b)});
@@ -1247,6 +1250,7 @@ if(bx&&(e.buttons&1)){bx.x1=e.clientX;bx.y1=e.clientY;if(!bx.active&&Math.hypot(
 if(pan&&down&&(e.buttons&1)&&(pan.moved||Math.hypot(e.clientX-down.x,e.clientY-down.y)>6)){const p1=gpt(e);if(p1&&pan.p0){let dx=pan.p0.x-p1.x,dz=pan.p0.z-p1.z;const m=Math.hypot(dx,dz);if(m>400){dx*=400/m;dz*=400/m}pan.moved=true;cam.position.x+=dx;cam.position.z+=dz;ctl.target.x+=dx;ctl.target.z+=dz;ctl.update()}}
 if(!tool)return;const v=groundHit(e,stroke?stroke.yb:undefined);hover=v?[v.x,v.z]:null;updGhost();if(stroke&&(e.buttons&1)&&v)strokeStep(v)});
 ren.domElement.addEventListener("pointerdown",e=>{if(!e.isPrimary){stroke=null;down=null;pan=null;mv=null;bx=null;selBoxEl.hidden=true;return}
+if(viewOnly){if(e.button===0){down={x:e.clientX,y:e.clientY,t:Date.now()};pan={p0:gpt(e),moved:false}}return}
 if(ed){edDownH(e);return}
 if(e.button===2){if(tool){setTool(null);rstroke=null;return}rstroke={pushed:false};delAt(e);return}
 if(e.button!==0)return;
@@ -1255,8 +1259,8 @@ if(!tool&&!(boxMode||e.shiftKey)){const hid=hitId(e);if(hid!==null&&sel.has(hid)
 if(!tool&&(boxMode||e.shiftKey)){bx={x0:e.clientX,y0:e.clientY,x1:e.clientX,y1:e.clientY,add:e.shiftKey,active:false};down={x:e.clientX,y:e.clientY,t:Date.now()};pan=null;return}
 down={x:e.clientX,y:e.clientY,t:Date.now()};pan={p0:gpt(e),moved:false}});
 addEventListener("pointerup",e=>{stroke=null;rstroke=null;pan=null;edUp();endDrag(e)});addEventListener("pointercancel",e=>{stroke=null;rstroke=null;pan=null;edUp();endDrag(e)});
-ren.domElement.addEventListener("dblclick",e=>{if(ed||tool)return;ray.setFromCamera(ptr(e),cam);for(const h of ray.intersectObjects(grp.children,true)){let o=h.object;while(o&&o.userData.id===undefined)o=o.parent;if(o){const it=items.find(i=>i.id===o.userData.id);if(it&&T[it.t].ed)openEd("item",it.id);break}}});
-ren.domElement.addEventListener("pointerup",e=>{if(e.button!==0||!down)return;const d=down;down=null;if(Math.hypot(e.clientX-d.x,e.clientY-d.y)>6||Date.now()-d.t>450)return;
+ren.domElement.addEventListener("dblclick",e=>{if(ed||tool||viewOnly)return;ray.setFromCamera(ptr(e),cam);for(const h of ray.intersectObjects(grp.children,true)){let o=h.object;while(o&&o.userData.id===undefined)o=o.parent;if(o){const it=items.find(i=>i.id===o.userData.id);if(it&&T[it.t].ed)openEd("item",it.id);break}}});
+ren.domElement.addEventListener("pointerup",e=>{if(viewOnly){down=null;return}if(e.button!==0||!down)return;const d=down;down=null;if(Math.hypot(e.clientX-d.x,e.clientY-d.y)>6||Date.now()-d.t>450)return;
 if(tool&&clip&&clip.group){const v=groundHit(e);if(!v)return;const [ax,ay]=snapWH(clip.group.W,clip.group.H,v.x,v.z);if(!groupAt(ax,ay,false))return;push();const made=groupAt(ax,ay,true);sel=new Set(made.map(i=>i.id));rebuild();return}
 if(tool){const v=groundHit(e);if(!v)return;const [x,y]=snap(tool,trot,v.x,v.z);if(!valid(tool,x,y,trot))return;push();const it=place(tool,x,y,trot);sel=new Set([it.id]);if(tool==="fob"){tool=null;updGhost();helpOpen=false;renderHelp()}rebuild();return}
 ray.setFromCamera(ptr(e),cam);const hits=ray.intersectObjects(grp.children,true);let id=null;for(const h of hits){let o=h.object;while(o&&o.userData.id===undefined)o=o.parent;if(o){id=o.userData.id;break}}
@@ -1270,11 +1274,11 @@ function del(){if(ed||!sel.size)return;const hasF=items.some(i=>sel.has(i.id)&&i
 if(hasF&&!armDel){armDel=true;$("st").textContent="Press Delete again to remove this F.O.B. and everything inside its zone";return}
 armDel=false;push();const rm=new Set(sel);items.filter(i=>sel.has(i.id)&&i.t==="fob").forEach(f=>{const [cx,cz]=zc(f);items.forEach(i=>{if(i.t==="fob")return;const [w,h]=dims(i.t,i.r);if(Math.abs(i.x+w/2-cx)<=R&&Math.abs(i.y+h/2-cz)<=R)rm.add(i.id)})});
 const gone=items.filter(i=>rm.has(i.id)&&i.t!=="fob");items=items.filter(i=>!rm.has(i.id));cascade(gone);sel=new Set();rebuild()}
-function undo(){const s=hist.pop();if(!s)return;autoDirty=true;items=s;sel=new Set();rebuild()}
+function undo(){const s=hist.pop();if(!s)return;autoDirty=true;bpDirty=true;items=s;sel=new Set();rebuild()}
 $("bRot").onclick=rot;$("bDel").onclick=del;$("bUndo").onclick=()=>ed?edUndo():undo();$("bSel").onclick=()=>setTool(null);
 $("bHalf").onclick=()=>{gmode=(gmode+1)%3;half=gmode===1;free=gmode===2;updGhost();ui()};
 $("bView").onclick=()=>setView(!plan);
-addEventListener("keydown",e=>{if(supOpen){if(e.key==="Escape")supHide();return}if(wOpen){if(e.key==="Escape"&&!$("wBack").hidden)wHide();return}if(/^(TEXTAREA|INPUT|SELECT)$/.test(e.target.tagName))return;const kk=e.key.toLowerCase();if(kk.length===1&&"wasdqe".includes(kk)&&!e.ctrlKey&&!e.metaKey){keys[kk]=true;return}if((e.ctrlKey||e.metaKey)&&kk==="c"){if(!ed&&sel.size>=1){e.preventDefault();copySel()}}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();ed?edUndo():undo()}else if(e.key==="r"||e.key==="R")rot();else if(e.key==="Delete"||e.key==="Backspace")del();else if(e.key==="Escape"){if(boxMode){boxMode=false;$("bBox").className=""}ed?edDone():setTool(null)}else if(ed&&(e.key==="["||e.key==="]"))edLevel(e.key==="]"?1:-1)});
+addEventListener("keydown",e=>{if(supOpen){if(e.key==="Escape")supHide();return}if(wOpen){if(e.key==="Escape"&&!$("wBack").hidden)wHide();return}if(/^(TEXTAREA|INPUT|SELECT)$/.test(e.target.tagName))return;const kk=e.key.toLowerCase();if(kk.length===1&&"wasdqe".includes(kk)&&!e.ctrlKey&&!e.metaKey){keys[kk]=true;return}if(viewOnly)return;if((e.ctrlKey||e.metaKey)&&kk==="c"){if(!ed&&sel.size>=1){e.preventDefault();copySel()}}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"){e.preventDefault();ed?edUndo():undo()}else if(e.key==="r"||e.key==="R")rot();else if(e.key==="Delete"||e.key==="Backspace")del();else if(e.key==="Escape"){if(boxMode){boxMode=false;$("bBox").className=""}ed?edDone():setTool(null)}else if(ed&&(e.key==="["||e.key==="]"))edLevel(e.key==="]"?1:-1)});
 addEventListener("keyup",e=>{keys[e.key.toLowerCase()]=false});addEventListener("blur",()=>{for(const k in keys)keys[k]=false});
 let lastT=performance.now();
 function moveCam(){const now=performance.now(),dt=Math.min(0.05,(now-lastT)/1000);lastT=now;if(g2&&g2.dirty){g2.dirty=false;procG2()}const f=(keys.w?1:0)-(keys.s?1:0),r=(keys.d?1:0)-(keys.a?1:0),sp=(keys.e?1:0)-(keys.q?1:0);
@@ -1336,16 +1340,18 @@ async function shareCode(){try{const raw=packItems();let flag=0,body=raw;try{con
 const u=new Uint8Array(body.length+1);u[0]=flag;u.set(body,1);return "w2"+b64u(u)}catch(e){return code()}}
 const AUTO_KEY="wd_auto";let autoReady=false,autoTimer=0;
 function autoCode(){const raw=packItems(),u=new Uint8Array(raw.length+1);u[0]=0;u.set(raw,1);return "w2"+b64u(u)}
-function saveAutoNow(){clearTimeout(autoTimer);if(!autoReady||!autoDirty)return;try{localStorage.setItem(AUTO_KEY,JSON.stringify({v:1,t:Date.now(),n:items.length,name:$("bpName").value||"",code:autoCode()}))}catch(e){}}
+function saveAutoNow(){clearTimeout(autoTimer);if(!autoReady||!autoDirty)return;try{localStorage.setItem(AUTO_KEY,JSON.stringify({v:1,t:Date.now(),n:items.length,name:$("bpName").value||"",desc:$("bpDesc").value||"",par:bpParent,sv:saveReady()?1:0,code:autoCode()}))}catch(e){}}
 function scheduleAuto(){if(!autoReady||!autoDirty)return;clearTimeout(autoTimer);autoTimer=setTimeout(saveAutoNow,700)}
 addEventListener("pagehide",saveAutoNow);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveAutoNow()});
-async function restoreAuto(){try{const r=JSON.parse(localStorage.getItem(AUTO_KEY)||"null");if(!r||typeof r.code!=="string"||!(r.n>0))return false;const ok=await loadAny(r.code);if(ok&&r.name)$("bpName").value=String(r.name).slice(0,40);return ok}catch(e){return false}}
+async function restoreAuto(){try{const r=JSON.parse(localStorage.getItem(AUTO_KEY)||"null");if(!r||typeof r.code!=="string"||!(r.n>0))return false;const ok=await loadAny(r.code);if(ok){if(r.name)$("bpName").value=String(r.name).slice(0,40);$("bpDesc").value=String(r.desc||"").slice(0,300);bpParent=r.par&&typeof r.par.code==="string"?{code:String(r.par.code).slice(0,5),title:String(r.par.title||"").slice(0,60),by:String(r.par.by||"").slice(0,20)}:null;bpSaved=!!r.sv;bpDirty=false}return ok}catch(e){return false}}
 const CLOUD={projectId:"wardogs-base-planner",apiKey:"AIzaSyBaCT6V_AGebjv5v-sP1bw86Mag7X5sbhc",authDomain:"wardogs-base-planner.firebaseapp.com",auth:true};/* auth stays false until Login / Register is released *//* filled in when the free database exists */
 const ALPHA="ABCDEFGHJKMNPQRSTUVWXYZ23456789",CODE_RE=/^[A-HJKMNP-Z2-9]{5}$/,cloudOn=()=>!!(CLOUD.projectId&&CLOUD.apiKey),authOn=()=>cloudOn()&&CLOUD.auth===true,fsBase=()=>"https://firestore.googleapis.com/v1/projects/"+CLOUD.projectId+"/databases/(default)/documents/bps";
 const newCode=()=>{let c;do{c=Array.from(crypto.getRandomValues(new Uint8Array(5)),b=>ALPHA[b%31]).join("")}while(c.startsWith("W2"));return c};
-async function cloudPut(data){for(let k=0;k<6;k++){const c=newCode(),r=await fetch(fsBase()+"?documentId="+c+"&key="+encodeURIComponent(CLOUD.apiKey),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:{d:{stringValue:data},n:{integerValue:String(items.length)},v:{integerValue:"1"}}})});
+async function cloudPut(data,title){for(let k=0;k<6;k++){const c=newCode(),f={d:{stringValue:data},n:{integerValue:String(items.length)},v:{integerValue:"1"}};if(title)f.title={stringValue:String(title).slice(0,60)};
+const r=await fetch(fsBase()+"?documentId="+c+"&key="+encodeURIComponent(CLOUD.apiKey),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:f})});
 if(r.ok)return c;if(r.status!==409)throw new Error("save "+r.status)}throw new Error("busy")}
-async function cloudGet(c){const r=await fetch(fsBase()+"/"+c+"?key="+encodeURIComponent(CLOUD.apiKey));if(!r.ok)return null;const j=await r.json();return j&&j.fields&&j.fields.d&&j.fields.d.stringValue||null}
+async function sdkPutBp(rec){for(let k=0;k<6;k++){const c=newCode(),ref=fbDb.collection("bps").doc(c),sn=await ref.get();if(sn.exists)continue;await ref.set(rec);return c}throw new Error("busy")}
+async function cloudGetDoc(c){const o=await fsGetDoc("bps/"+c);return o&&o.d?o:null}
 /* ---- login (Google), profile and public profile pages ---- */
 let authUser=null,authReady=false,authErr="",profile=null,sdkP=null,fbDb=null;
 const IN_APP=/FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly|BytedanceWebview|Snapchat|Twitter/i.test(navigator.userAgent);
@@ -1411,36 +1417,69 @@ out.onclick=async()=>{try{await firebase.auth().signOut()}catch(e){}profHide()}}
 const fileNo=uid=>{let h=0;String(uid).split("").forEach(c=>{h=(h*31+c.charCodeAt(0))|0});return "BP-"+(Math.abs(h)%900000+100000)};
 const fmtDate=iso=>{const d=new Date(iso);return isNaN(d)?"UNKNOWN":d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}).toUpperCase()};
 async function userBuilds(uid){return[]}   /* filled in when sharing to the Intel Board exists */
-function dsHead(){const c=$("profCard");profShow("","");c.classList.add("dossier");const top=mk("div","","dsTop");top.append(mk("span","TOP SECRET // BASE PLANNER INTEL"));profBody.append(top);const st=mk("div","CLASSIFIED","dsStamp");profBody.append(st)}
+function dsHead(stamp){const c=$("profCard");profShow("","");c.classList.add("dossier");const top=mk("div","","dsTop");top.append(mk("span","TOP SECRET // BASE PLANNER INTEL"));profBody.append(top);const st=mk("div",stamp||"CLASSIFIED","dsStamp");profBody.append(st)}
+function socialsInto(list,p){let n=0;const addLink=(label,name,href)=>{const r=mk("div"),a=mk("a",label+": "+name);a.href=href;a.target="_blank";a.rel="noopener noreferrer nofollow ugc";r.append(a);list.append(r);n++};
+if(p.youtube&&RE_YT.test(p.youtube))addLink("YouTube","@"+socName(p.youtube),ytLink(p.youtube));if(p.tiktok&&RE_SOC.test(p.tiktok))addLink("TikTok","@"+p.tiktok,ttLink(p.tiktok));if(p.discord&&RE_DISC.test(p.discord)){list.append(mk("div","Discord: "+p.discord));n++}return n}
 function dsSection(title){profBody.append(mk("h3",title,"dsH"))}
 function redacted(n){return mk("span","\u2588".repeat(n),"redact")}
 function viewPublic(p){dsHead();profBody.firstChild.append(mk("span","FILE "+fileNo(p.uid||p.username)));
 const sub=mk("div","","dsSubj");sub.append(mk("div","SUBJECT","dsLbl"),mk("h2",p.username,"dsName"));profBody.append(sub);
 const meta=mk("div","","dsMeta");meta.append(mk("div","FILED: "+fmtDate(p.createdAt)),mk("div","STATUS: ACTIVE BUILDER"));profBody.append(meta);
 dsSection("BRIEFING");if(p.bio)profBody.append(mk("p",p.bio,"bio"));else{const r=mk("p","","bio");r.append(redacted(18)," ",redacted(9));profBody.append(r)}
-dsSection("KNOWN CHANNELS");const list=mk("div","","socials");const addLink=(label,name,href)=>{const r=mk("div"),a=mk("a",label+": "+name);a.href=href;a.target="_blank";a.rel="noopener noreferrer nofollow ugc";r.append(a);list.append(r)};
-if(p.youtube&&RE_YT.test(p.youtube))addLink("YouTube","@"+socName(p.youtube),ytLink(p.youtube));if(p.tiktok&&RE_SOC.test(p.tiktok))addLink("TikTok","@"+p.tiktok,ttLink(p.tiktok));if(p.discord&&RE_DISC.test(p.discord))list.append(mk("div","Discord: "+p.discord));
-if(list.children.length)profBody.append(list);else{const r=mk("div","NONE ON FILE ","socials");r.append(redacted(7));profBody.append(r)}
+dsSection("KNOWN CHANNELS");const list=mk("div","","socials");if(socialsInto(list,p))profBody.append(list);else{const r=mk("div","NONE ON FILE ","socials");r.append(redacted(7));profBody.append(r)}
 dsSection("FILED BLUEPRINTS");const bl=mk("div","","builds");bl.append(mk("div","Retrieving records..."));profBody.append(bl);
 userBuilds(p.uid).then(list=>{bl.textContent="";if(!list.length){bl.append(mk("div","NO BLUEPRINTS FILED YET."));return}list.forEach(b=>{const r=mk("div");const a=mk("a",b.title||b.code);a.href="#"+b.code;r.append(a);bl.append(r)})}).catch(()=>{bl.textContent="RECORDS UNAVAILABLE."});
 profBody.append(mk("div","\u2014 END OF FILE \u2014","dsEnd"))}
 async function viewPublicByName(name){dsHead();profBody.append(mk("p","Retrieving file..."));try{const p=await getProfileByName(name);if(p)viewPublic(p);else{dsHead();const r=mk("p","NO RECORD ON FILE FOR THAT CODENAME.","bio");profBody.append(r)}}catch(e){dsHead();profBody.append(mk("p","FILE TEMPORARILY UNAVAILABLE.","bio"))}}
+
+/* ---- read-only shared page, remixing ---- */
+const vbMsg=t=>{$("vbTxt").textContent=t};
+function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;hist.length=0}
+function enterView(r){if(ed)edDone();setTool(null);boxMode=false;$("bBox").className="";loadItems(r.arr);hist.length=0;viewOnly=true;vmeta={code:r.code,doc:r.doc};autoDirty=false;bpDirty=false;
+$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();showBlueprintFile()}
+async function exitView(){leaveView();profHide();const ok=await restoreAuto();if(!ok){items=[];sel=new Set();bpSaved=false;bpDirty=false;bpParent=null;$("bpName").value="";$("bpDesc").value="";rebuild();wShow(false)}autoDirty=false;renderShare();ui()}
+function doRemix(){if(!viewOnly||!vmeta)return;if(authUser&&!profile){openMyProfile();return}
+if(!(authUser&&profile)){vbMsg("Log in to remix this blueprint.");startLogin(vbMsg).then(ok=>{if(ok)vbMsg("Logged in. Press Remix again.")});return}
+const d=vmeta.doc||{},title=d.title||"Shared blueprint";bpParent=vmeta.code?{code:vmeta.code,title:title.slice(0,60),by:(d.by||"").slice(0,20)}:null;
+leaveView();profHide();bpSaved=false;bpDirty=true;$("bpName").value=("Remix of "+title).slice(0,40);$("bpDesc").value="";autoDirty=true;scheduleAuto();renderShare();ui();
+say("Remix started. Save it to keep your changes."+(bpParent?" It will be credited as built on "+bpParent.title+(bpParent.by?" by "+bpParent.by:"")+".":""))}
+function showBlueprintFile(){if(!vmeta)return;const d=vmeta.doc||{};dsHead("BLUEPRINT FILE");profBody.firstChild.append(mk("span",vmeta.code?"CODE "+vmeta.code:"SHARED LINK"));
+const sub=mk("div","","dsSubj");sub.append(mk("div","BLUEPRINT","dsLbl"),mk("h2",d.title||"Shared blueprint","dsName"));profBody.append(sub);
+const meta=mk("div","","dsMeta");meta.append(mk("div","ITEMS: "+items.length+"   SUPPLIES: "+fmtN(supCalc().total)));if(d.t)meta.append(mk("div","FILED: "+fmtDate(d.t)));profBody.append(meta);
+dsSection("BUILDER");const bw=mk("div","","socials");if(d.by){const a=mk("a","@"+d.by);a.href="#u/"+encodeURIComponent(d.by);a.onclick=e=>{e.preventDefault();viewPublicByName(d.by)};bw.append(a)}else bw.append(mk("div","UNKNOWN BUILDER"));profBody.append(bw);
+dsSection("BRIEFING");if(d.desc)profBody.append(mk("p",d.desc,"bio"));else{const r=mk("p","","bio");r.append(redacted(18)," ",redacted(9));profBody.append(r)}
+if(d.parent){dsSection("BUILT ON");const pw=mk("div","","socials"),a=mk("a",(d.parentTitle||"Another blueprint")+(d.parentBy?" by "+d.parentBy:""));a.href="#"+d.parent;a.onclick=e=>{e.preventDefault();openShared(d.parent)};pw.append(a);profBody.append(pw)}
+if(d.uid){dsSection("KNOWN CHANNELS");const bx2=mk("div","Retrieving...","socials");profBody.append(bx2);getProfileByUid(d.uid).then(p=>{bx2.textContent="";if(!p||!socialsInto(bx2,p))bx2.append(mk("span","NONE ON FILE"))}).catch(()=>{bx2.textContent="UNAVAILABLE"})}
+if(vmeta.code){dsSection("SHARE CODE");const cr=mk("div","","socials");cr.append(mk("span",vmeta.code+"  "));const cb=mk("button","Copy");cb.type="button";cb.onclick=async()=>{try{await navigator.clipboard.writeText(vmeta.code);cb.textContent="Copied"}catch(e){cb.textContent=vmeta.code}};cr.append(cb);profBody.append(cr)}
+const row=mk("div","","shRow");row.style.marginTop="12px";const rb=mk("button","Remix this blueprint"),vb=mk("button","View in 3D");rb.type=vb.type="button";rb.onclick=doRemix;vb.onclick=profHide;row.append(rb,vb);profBody.append(row);
+profBody.append(mk("div","\u2014 END OF FILE \u2014","dsEnd"))}
+$("vbInfo").onclick=()=>showBlueprintFile();$("vbRemix").onclick=doRemix;$("vbClose").onclick=exitView;
 $("profClose").onclick=profHide;profPanel.addEventListener("pointerdown",e=>{if(e.target===profPanel)profHide()});
 $("who").onclick=()=>{if(authUser)openMyProfile()};
-$("wLogin").onclick=async()=>{const m=$("wAuthMsg");m.textContent="";if(authUser){wHide();openMyProfile();return}
-if(IN_APP){m.textContent="Google blocks sign-in inside TikTok and other in-app browsers. Open this page in Chrome or Safari to log in.";return}
-try{await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())}catch(e){m.textContent=e&&e.code==="auth/popup-closed-by-user"?"Sign-in cancelled.":"Could not sign in. Allow pop-ups for this site and try again."}};
+async function startLogin(sayFn){if(IN_APP){sayFn("Google blocks sign-in inside TikTok and other in-app browsers. Open this page in Chrome or Safari to log in.");return false}
+if(!authReady||!window.firebase){sayFn("Sign-in is still loading. Try again in a moment.");return false}
+try{await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());return true}catch(e){sayFn(e&&e.code==="auth/popup-closed-by-user"?"Sign-in cancelled.":"Could not sign in. Allow pop-ups for this site and try again.");return false}}
+$("wLogin").onclick=async()=>{const m=$("wAuthMsg");m.textContent="";if(authUser){wHide();openMyProfile();return}await startLogin(t=>{m.textContent=t})};
 async function inflateLimited(u,max){const rd=new Blob([u]).stream().pipeThrough(new DecompressionStream("deflate-raw")).getReader(),out=[];let n=0;
 for(;;){const r=await rd.read();if(r.done)break;n+=r.value.length;if(n>max){try{await rd.cancel()}catch(e){}throw new Error("too big")}out.push(r.value)}
 const all=new Uint8Array(n);let o=0;out.forEach(c=>{all.set(c,o);o+=c.length});return all}
-async function loadAny(c){try{c=String(c).trim();if(c.includes("#"))c=c.split("#").pop();c=c.trim();
-if(c.length===5&&!/^w2/i.test(c)&&CODE_RE.test(c.toUpperCase())){if(!cloudOn())return false;const d=await cloudGet(c.toUpperCase());return d?await loadAny(d):false}
-if(c.startsWith("w2")){const u=unb64u(c.slice(2));let body=u.subarray(1);if(u[0]&1)body=await inflateLimited(body,1500000);return loadItems(unpackItems(body))}return load(c)}catch(e){return false}}
-$("bLink").onclick=async()=>{const long=await shareCode();let c=long,short=false,note="";
-if(cloudOn()){try{c=await cloudPut(long);short=true}catch(e){note="Could not reach the share server, so this is the long link. "}}
+async function decodeBody(c){if(c.startsWith("w2")){const u=unb64u(c.slice(2));let body=u.subarray(1);if(u[0]&1)body=await inflateLimited(body,1500000);return unpackItems(body)}return JSON.parse(atob(c))}
+async function decodeAny(c){c=String(c).trim();if(c.includes("#"))c=c.split("#").pop();c=c.trim();
+if(c.length===5&&!/^w2/i.test(c)&&CODE_RE.test(c.toUpperCase())){if(!cloudOn())return null;const code=c.toUpperCase(),doc=await cloudGetDoc(code);if(!doc)return null;return{arr:await decodeBody(doc.d),doc,code}}
+return{arr:await decodeBody(c),doc:null,code:""}}
+async function loadAny(c){try{const r=await decodeAny(c);return r?loadItems(r.arr):false}catch(e){return false}}
+async function openShared(raw){try{const r=await decodeAny(raw);if(!r)return false;enterView(r);return true}catch(e){return false}}
+function slugOf(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)||"blueprint"}
+const saveReady=()=>bpSaved&&!bpDirty;
+function renderShare(){const ready=saveReady();$("bSave").textContent=ready?"Share to Intel Board":"Save blueprint";$("bLink").disabled=!ready||viewOnly;$("bSave").disabled=viewOnly;$("bpDesc").hidden=!(authUser&&profile)}
+const say=t=>{$("msg").textContent=t};
+async function shareBoard(){if(!(authUser&&profile)){say("Log in to share to the Intel Board. Use LOGIN / REGISTER in the menu.");startLogin(say);return}say("Sharing to the Intel Board arrives in the next update.")}
+$("bLink").onclick=async()=>{if(!saveReady()){say("Save the blueprint first, then you can get its share code.");return}
+const long=await shareCode(),name=$("bpName").value.trim().slice(0,40);let c=long,short=false,note="";
+if(cloudOn()){try{if(authUser&&profile&&fbDb){c=await sdkPutBp({d:long,n:items.length,v:1,title:name,desc:($("bpDesc").value||"").trim().slice(0,300),uid:authUser.uid,by:profile.username,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()})}else c=await cloudPut(long,name);short=true}catch(e){note="Could not reach the share server, so this is the long link. "}}
 const out=short?c:location.href.split("#")[0]+"#"+c;$("box").value=out;let ok=false;try{await navigator.clipboard.writeText(out);ok=true}catch(e){}
-$("msg").textContent=note+(short?"Share code "+c+(ok?" copied. Type it in Menu, Load Blueprint.":". Copy it from the box."):(ok?"Link copied, ":"Copy the link from the box, ")+out.length+" characters.")};
-$("bLoad").onclick=async()=>{$("msg").textContent=(await loadAny($("box").value))?"Loaded.":"Could not read that code."};
+say(note+(short?"Share code "+c+(ok?" copied. Type it in Menu, Load Blueprint.":". Copy it from the box."):(ok?"Link copied, ":"Copy the link from the box, ")+out.length+" characters."))};
+$("bLoad").onclick=async()=>{say((await openShared($("box").value))?"Opened.":"Could not read that code.")};
 /* welcome menu and the blueprint library kept on this device */
 let wOpen=false,bpCur="";
 const hdrEl=document.querySelector("header"),setHdr=()=>document.documentElement.style.setProperty("--hdr",hdrEl.offsetHeight+"px");
@@ -1449,24 +1488,31 @@ const bpStore=a=>{try{localStorage.setItem("wd_bps",JSON.stringify(a));return tr
 function wView(v){$("wMain").hidden=v!=="main";$("wLoad").hidden=v!=="load";if(v==="load"){$("wMsg").textContent="";renderBp()}}
 function wShow(fromMenu){wOpen=true;setHdr();$("welcome").hidden=false;$("wBack").hidden=!fromMenu;wView("main");$("wNew").focus()}
 function wHide(){wOpen=false;$("welcome").hidden=true}
-function renderBp(){const L=$("wList");L.textContent="";const a=bpList();
-if(!a.length){const d=document.createElement("div");d.style.cssText="font-size:12px;color:var(--muted);margin:0 0 8px";d.textContent="No saved blueprints yet. Save one from the planner with the Save blueprint button.";L.appendChild(d);return}
-a.forEach(b=>{const r=document.createElement("div");r.className="wRow";const nm=document.createElement("div");nm.className="nm";nm.textContent=b.name;const sm=document.createElement("small");sm.textContent=(b.n||0)+" items, "+new Date(b.t||0).toLocaleDateString();nm.appendChild(sm);
-const o=document.createElement("button");o.textContent="Open";o.onclick=async()=>{if(await loadAny(b.code)){bpCur=b.name;$("bpName").value=b.name;wHide()}else $("wMsg").textContent="Could not read that blueprint."};
-const d=document.createElement("button");d.textContent="Delete";d.onclick=()=>{if(d.dataset.arm){bpStore(bpList().filter(x=>x.id!==b.id));renderBp()}else{d.dataset.arm="1";d.textContent="Sure?"}};
-r.append(nm,o,d);L.appendChild(r)})}
-async function saveBp(){const name=$("bpName").value.trim().slice(0,40);if(!name){$("msg").textContent="Give the blueprint a name first.";return}
-const a=bpList(),i=a.findIndex(b=>b.name.toLowerCase()===name.toLowerCase()),rec={id:i>=0?a[i].id:Date.now().toString(36),name,code:await shareCode(),t:Date.now(),n:items.length};if(i>=0)a[i]=rec;else a.unshift(rec);
-$("msg").textContent=bpStore(a)?(i>=0?"Updated ":"Saved ")+name+".":"Could not save: this browser is blocking storage.";bpCur=name}
-$("bSave").onclick=saveBp;$("bMenu").onclick=()=>wShow(true);
-$("wNew").onclick=()=>{push();items=[];sel=new Set();tool=null;updGhost();bpCur="";$("bpName").value="";rebuild();wHide()};
+function wRow(L,name,small,onOpen,onDel){const r=document.createElement("div");r.className="wRow";const nm=document.createElement("div");nm.className="nm";nm.textContent=name;const sm=document.createElement("small");sm.textContent=small;nm.appendChild(sm);
+const o=document.createElement("button");o.textContent="Open";o.onclick=onOpen;const d=document.createElement("button");d.textContent="Delete";d.onclick=()=>{if(d.dataset.arm)onDel();else{d.dataset.arm="1";d.textContent="Sure?"}};r.append(nm,o,d);L.appendChild(r)}
+function wHeading(L,t){const h=document.createElement("div");h.className="k";h.style.cssText="margin:8px 0 4px";h.textContent=t;L.appendChild(h)}
+async function openSaved(code,name,extra){if(await loadAny(code)){leaveView();bpCur=name;$("bpName").value=name;$("bpDesc").value=String(extra&&extra.desc||"").slice(0,300);bpParent=extra&&extra.parent?{code:extra.parent,title:extra.parentTitle||"",by:extra.parentBy||""}:null;bpSaved=true;bpDirty=false;autoDirty=false;renderShare();wHide();return true}$("wMsg").textContent="Could not read that blueprint.";return false}
+function renderBp(){const L=$("wList");L.textContent="";const acct=!!(authUser&&profile&&fbDb);
+if(acct){wHeading(L,"IN YOUR ACCOUNT");const lo=document.createElement("div");lo.textContent="Loading...";lo.style.cssText="font-size:12px;color:var(--muted)";L.appendChild(lo);
+fbDb.collection("users").doc(authUser.uid).collection("saves").orderBy("t","desc").limit(50).get().then(q=>{lo.remove();if(q.empty){const e=document.createElement("div");e.style.cssText="font-size:12px;color:var(--muted);margin:0 0 6px";e.textContent="Nothing saved in your account yet.";L.insertBefore(e,L.children[1]);return}
+const frag=document.createDocumentFragment();q.forEach(doc=>{const b=doc.data();wRow(frag,b.name,(b.n||0)+" items, "+(b.t&&b.t.toDate?b.t.toDate().toLocaleDateString():""),()=>openSaved(b.d,b.name,b),async()=>{try{await doc.ref.delete();renderBp()}catch(e){$("wMsg").textContent="Could not delete."}})});L.insertBefore(frag,L.children[1])}).catch(()=>{lo.textContent="Could not load your saved blueprints."});wHeading(L,"ON THIS DEVICE")}
+const a=bpList();if(!a.length){const d=document.createElement("div");d.style.cssText="font-size:12px;color:var(--muted);margin:0 0 8px";d.textContent=acct?"Nothing saved on this device.":"No saved blueprints yet. Save one from the planner with the Save blueprint button.";L.appendChild(d);return}
+a.forEach(b=>wRow(L,b.name,(b.n||0)+" items, "+new Date(b.t||0).toLocaleDateString(),()=>openSaved(b.code,b.name,null),()=>{bpStore(bpList().filter(x=>x.id!==b.id));renderBp()}))}
+async function saveBp(){const name=$("bpName").value.trim().slice(0,40),desc=($("bpDesc").value||"").trim().slice(0,300);if(!name){say("Give the blueprint a name first.");return}
+const code=await shareCode();let where="on this device";
+if(authUser&&profile&&fbDb){try{await fbDb.collection("users").doc(authUser.uid).collection("saves").doc(slugOf(name)).set({name,d:code,n:items.length,desc,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()});where="in your account"}catch(e){say("Could not save to your account. Try again.");return}}
+else{const a=bpList(),i=a.findIndex(b=>b.name.toLowerCase()===name.toLowerCase()),rec={id:i>=0?a[i].id:Date.now().toString(36),name,code,t:Date.now(),n:items.length};if(i>=0)a[i]=rec;else a.unshift(rec);if(!bpStore(a)){say("Could not save: this browser is blocking storage.");return}}
+bpCur=name;bpSaved=true;bpDirty=false;renderShare();
+say("Saved "+name+" "+where+"."+(bpParent?" This blueprint is built on "+bpParent.title+(bpParent.by?" by "+bpParent.by:"")+".":""))}
+$("bSave").onclick=()=>{if(viewOnly)return;if(saveReady())shareBoard();else saveBp()};$("bMenu").onclick=()=>wShow(true);[$("bpName"),$("bpDesc")].forEach(e=>e.addEventListener("input",()=>{bpDirty=true;renderShare()}));
+$("wNew").onclick=()=>{leaveView();push();items=[];sel=new Set();tool=null;updGhost();bpCur="";$("bpName").value="";$("bpDesc").value="";bpParent=null;bpSaved=false;bpDirty=false;rebuild();wHide()};
 $("wLoadB").onclick=()=>wView("load");$("wLoadBack").onclick=()=>wView("main");$("wBack").onclick=wHide;
-$("wOpenCode").onclick=async()=>{if(await loadAny($("wCode").value)){bpCur="";$("bpName").value="";wHide()}else $("wMsg").textContent="Could not read that code."};
+$("wOpenCode").onclick=async()=>{if(!(await openShared($("wCode").value)))$("wMsg").textContent="Could not read that code."};
 addEventListener("resize",setHdr);
 let lw=0,lh=0;function fit(){const W=box.clientWidth,H=box.clientHeight;if(!W||!H||(W===lw&&H===lh))return;lw=W;lh=H;ren.setSize(W,H,false);cam.aspect=W/H;cam.updateProjectionMatrix()}
 addEventListener("resize",fit);fit();setView(true);rebuild();setHdr();initAuth();(async()=>{const h=location.hash.slice(1);let ok=false;
 if(/^u\//i.test(h)){if(cloudOn())viewPublicByName(decodeURIComponent(h.slice(2)));ok=await restoreAuto()}
-else ok=h.length>0?await loadAny(h):await restoreAuto();autoDirty=false;autoReady=true;if(!ok)wShow(false)})();
+else if(h.length>0){ok=await openShared(h);if(!ok)ok=await restoreAuto()}else ok=await restoreAuto();if(!viewOnly)autoDirty=false;autoReady=true;if(!ok)wShow(false)})();
 (function loop(){requestAnimationFrame(loop);fit();moveCam();ctl.update();
 const dd=cam.position.distanceTo(ctl.target),nn=Math.max(0.05,dd/150),ff=Math.max(400,dd*40);if(Math.abs(nn-cam.near)>nn*0.05||Math.abs(ff-cam.far)>ff*0.05){cam.near=nn;cam.far=ff;cam.updateProjectionMatrix()}
 ren.render(scene,cam)})();

@@ -73,7 +73,7 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #profCard.dossier a{color:#4a1f12;font-size:13px;word-break:break-word}
 .dsTop{display:flex;justify-content:space-between;gap:8px;font-size:10px;letter-spacing:2px;border-bottom:2px solid #2a2618;padding-bottom:4px;flex-wrap:wrap}
 .dsStamp{align-self:center;margin:14px 0 8px;font-size:26px;font-weight:bold;letter-spacing:6px;color:#a52a2a;border:4px double #a52a2a;padding:2px 16px;transform:rotate(-6deg);opacity:.9}
-.dsSubj{margin:6px 0}.dsLbl{font-size:10px;letter-spacing:3px}.dsName{display:block!important;margin:0;font-size:28px;letter-spacing:3px;word-break:break-word;color:#2a2618;text-transform:uppercase}
+.dsSubj{margin:6px 0}.dsLbl{font-size:10px;letter-spacing:3px}.dsInline{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.dsName{display:inline-block!important;margin:0;font-size:28px;letter-spacing:3px;word-break:break-word;color:#2a2618;text-transform:uppercase}
 .dsMeta{font-size:11px;letter-spacing:1px;border-top:1px dashed #2a2618;border-bottom:1px dashed #2a2618;padding:6px 0;margin:8px 0}
 .dsH{margin:14px 0 4px;font-size:12px;letter-spacing:3px;border-bottom:2px solid #2a2618;padding-bottom:2px}
 #profCard.dossier .bio{white-space:pre-wrap;word-break:break-word;line-height:1.5;margin:4px 0}.redact{background:#2a2618;color:#2a2618;user-select:none}
@@ -93,6 +93,8 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 .wfoot{margin-top:12px;font-size:11px;line-height:1.5;color:var(--muted)}
 #viewBar{position:absolute;left:0;right:0;top:0;z-index:6;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--panel);border-bottom:2px solid var(--border);font-size:12px}
 #vbBuilder{position:absolute;right:8px;top:46px;z-index:5;max-width:220px;background:#d9cfae;color:#2a2618;border:2px solid #6b6139;padding:6px 9px;font-size:11px;line-height:1.4}
+#vbBuilder.full{width:270px;max-height:calc(100% - 100px);overflow:auto;padding:8px 10px}.bcStamp{display:inline-block;font-size:11px;font-weight:bold;letter-spacing:4px;color:#a52a2a;border:2px double #a52a2a;padding:0 8px;transform:rotate(-3deg);margin-bottom:4px}
+.bcHd{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:4px}.bcBody{font-size:11px;line-height:1.45;border-top:1px dashed #2a2618;padding-top:5px}.bcBody p{margin:2px 0 6px;white-space:pre-wrap;word-break:break-word}.bcBody .bcLbl{margin-top:6px}.bcBody button{margin-top:8px;background:#2a2618;color:#d9cfae;border-color:#2a2618;padding:4px 8px;min-height:28px}
 .bcLbl{font-size:9px;letter-spacing:3px}.bcName{display:block;font-size:15px;font-weight:bold;letter-spacing:1px;color:#2a2618;word-break:break-all}
 .bcSoc{margin-top:3px}.bcSoc a{color:#4a1f12;font-size:11px;word-break:break-all}
 #vbTxt{flex:1 1 200px;min-width:0;word-break:break-word}.vbBtns{display:flex;gap:6px}.vbBtns button{padding:5px 9px;min-height:32px}
@@ -145,7 +147,7 @@ header{padding:6px 10px;gap:8px}h1{font-size:15px;letter-spacing:1px}header .tag
 <div id="bar"><div id="tools"><button id="bUndo">Undo</button><button id="bRot">Rotate (R)</button><button id="bDel">Delete</button><button id="bCopy" type="button">Copy</button><button id="bHalf">Grid</button><button id="bSel">Select mode</button><button id="bBox" type="button">Box select</button><button id="bView">Plan view</button><button id="bParts">Edit parts</button></div><span id="st"></span></div>
 <div id="edRow" hidden><b id="edT"></b><button id="edLm">Level ▼</button><span id="edLv">1</span><button id="edLp">Level ▲</button><button id="edReset">Reset to default</button><button id="edClear">Clear parts</button><button id="edErase">Erase</button><button id="edDone">Done</button></div>
 <div id="main"><div id="side"><aside id="pal"></aside><aside id="edPal" hidden></aside><button id="supBtn" type="button"><span>SUPPLIES</span><b id="supTot">0</b></button>
-<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbClose" type="button">Close</button></div></div><div id="vbBuilder" hidden></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
+<div id="shareBox"><button id="shHead" type="button"></button><div id="shBody"><input id="bpName" maxlength="40" placeholder="Blueprint name" aria-label="Blueprint name"><textarea id="bpDesc" maxlength="300" placeholder="Description (optional, shown on the shared page)" aria-label="Blueprint description" hidden></textarea><div class="shRow"><button id="bSave" type="button">Save blueprint</button><button id="bLink" type="button">Get share code</button></div><textarea id="box" placeholder="Paste a share code or link here"></textarea><button id="bLoad" type="button">Load code or link</button><div id="msg" role="status"></div></div></div><div id="help"><button id="hHead"></button><div id="hBody"></div></div></div><div id="dbg"></div><div id="c"><div id="viewBar" hidden><div id="vbTxt"></div><div class="vbBtns"><button id="vbInfo" type="button">Details</button><button id="vbRemix" type="button">Remix</button><button id="vbAdmin" type="button" hidden>Delete post (admin)</button><button id="vbClose" type="button">Close</button></div></div><div id="vbBuilder" hidden></div><div id="camPad"><button id="cpL" aria-label="Turn the view left">&#9664;</button><button id="cpR" aria-label="Turn the view right">&#9654;</button><button id="cpU" aria-label="Tilt towards top-down">&#9650;</button><button id="cpD" aria-label="Tilt towards the horizon">&#9660;</button><button id="cpIn" aria-label="Zoom in">+</button><button id="cpOut" aria-label="Zoom out">&minus;</button></div></div></div>
 
 <footer id="foot"><a href="https://discord.gg/qArh7JqVuF" target="_blank" rel="noopener">Feedback and community: Discord</a></footer>
 <div id="boardPanel" hidden><div id="boardTop"><div class="k">INTEL BOARD</div><div id="boardBar"><input id="boardQ" placeholder="Search by title or builder" aria-label="Search the board"><button id="boardGo" type="button">Search</button><select id="boardSort" aria-label="Sort"><option value="new">Newest</option><option value="liked">Most liked</option></select><button id="boardClose" type="button">Close</button></div></div><div id="boardGrid"></div><div id="boardMsg" role="status"></div><button id="boardMore" type="button" hidden>Load more</button></div>
@@ -1369,7 +1371,10 @@ if(r.ok)return c;if(r.status!==409)throw new Error("save "+r.status)}throw new E
 async function sdkPutBp(rec){for(let k=0;k<6;k++){const c=newCode(),ref=fbDb.collection("bps").doc(c),sn=await ref.get();if(sn.exists)continue;await ref.set(rec);return c}throw new Error("busy")}
 async function cloudGetDoc(c){const o=await fsGetDoc("bps/"+c);return o&&o.d?o:null}
 /* ---- login (Google), profile and public profile pages ---- */
-let authUser=null,authReady=false,authErr="",profile=null,sdkP=null,fbDb=null;
+let authUser=null,authReady=false,authErr="",profile=null,sdkP=null,fbDb=null,adminOn=false;
+const ADMIN_H="601186dec69d456d4dd83a41e3e3e1aa1cf93b553ef64f5204de6a0c01f851bf";
+async function sha256hex(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b),x=>x.toString(16).padStart(2,"0")).join("")}
+async function adminCheck(u){try{const e=(u.email||"").toLowerCase();if(!u.emailVerified||!e)return;if(await sha256hex(e)===ADMIN_H&&authUser===u){adminOn=true;renderLogin();if(!$("boardPanel").hidden)boardLoad(true)}}catch(x){}}
 const IN_APP=/FBAN|FBAV|Instagram|Line\/|TikTok|musical_ly|BytedanceWebview|Snapchat|Twitter/i.test(navigator.userAgent);
 const RE_USER=/^[A-Za-z0-9_]{3,20}$/,RE_SOC=/^[A-Za-z0-9._-]{0,30}$/,RE_DISC=/^[A-Za-z0-9._]{0,32}$/,RE_YT=/^(?:[A-Za-z0-9._-]{0,30}|(?:c|user|channel)\/[A-Za-z0-9._-]{1,60})$/;
 const ytLink=ref=>ref.includes("/")?"https://www.youtube.com/"+ref.split("/").map(encodeURIComponent).join("/"):"https://www.youtube.com/@"+encodeURIComponent(ref),ttLink=n=>"https://www.tiktok.com/@"+encodeURIComponent(n),socName=ref=>ref.split("/").pop();
@@ -1394,12 +1399,12 @@ function renderLogin(){const b=$("wLogin"),t=$("wLoginT"),s=$("wLoginS"),w=$("wh
 if(!authOn()){b.disabled=true;t.textContent="LOGIN / REGISTER";s.textContent="Save blueprints online and post to the Intel Board. Coming soon.";w.textContent="";return}
 if(!authReady){b.disabled=true;t.textContent="LOGIN / REGISTER";s.textContent=authErr||"Connecting...";w.textContent="";return}
 b.disabled=false;
-if(authUser){const nm=profile&&profile.username||authUser.displayName||"builder";t.textContent="MY PROFILE";s.textContent="Signed in as "+nm+".";w.textContent=nm}
+if(authUser){const nm=profile&&profile.username||authUser.displayName||"builder";t.textContent="MY PROFILE";s.textContent="Signed in as "+nm+".";w.textContent=nm+(adminOn?" (admin)":"")}
 else{t.textContent="LOGIN / REGISTER";s.textContent=IN_APP?"Open this page in Chrome or Safari to log in.":"Sign in with Google to save blueprints online and post to the Intel Board.";w.textContent=""}}
 function ensureSDK(){if(sdkP)return sdkP;sdkP=(async()=>{for(const f of["app","auth","firestore"])await loadScript("https://www.gstatic.com/firebasejs/"+FB_VER+"/firebase-"+f+"-compat.js");
 firebase.initializeApp({apiKey:CLOUD.apiKey,authDomain:CLOUD.authDomain||CLOUD.projectId+".firebaseapp.com",projectId:CLOUD.projectId});fbDb=firebase.firestore();
-await new Promise(res=>{let first=true;firebase.auth().onAuthStateChanged(async u=>{authUser=u;profile=null;if(u){try{profile=await getProfileByUid(u.uid)}catch(e){}}authReady=true;renderLogin();
-if(u&&!profile&&!first)openMyProfile();if(first){first=false;res()}})})})();sdkP.catch(()=>{authErr="Sign-in is not available right now.";sdkP=null;renderLogin()});return sdkP}
+await new Promise(res=>{let first=true;firebase.auth().onAuthStateChanged(async u=>{const real=u&&!u.isAnonymous?u:null;authUser=real;profile=null;adminOn=false;if(real){try{profile=await getProfileByUid(real.uid)}catch(e){}adminCheck(real)}authReady=true;renderLogin();if(real&&viewOnly&&vmeta)countView(vmeta.code,vmeta.doc);
+if(real&&!profile&&!first)openMyProfile();if(first){first=false;res()}})})})();sdkP.catch(()=>{authErr="Sign-in is not available right now.";sdkP=null;renderLogin()});return sdkP}
 async function initAuth(){renderLogin();if(!authOn())return;setTimeout(()=>{ensureSDK().catch(()=>{})},2000)}
 const FVts=()=>firebase.firestore.FieldValue.serverTimestamp();
 async function createProfile(username){const lower=username.toLowerCase(),uref=fbDb.collection("usernames").doc(lower),pref=fbDb.collection("users").doc(authUser.uid);
@@ -1438,25 +1443,29 @@ if(p.youtube&&RE_YT.test(p.youtube))addLink("YouTube","@"+socName(p.youtube),ytL
 function dsSection(title){profBody.append(mk("h3",title,"dsH"))}
 function redacted(n){return mk("span","\u2588".repeat(n),"redact")}
 function viewPublic(p){dsHead();profBody.firstChild.append(mk("span","FILE "+fileNo(p.uid||p.username)));
-const sub=mk("div","","dsSubj");sub.append(mk("div","SUBJECT","dsLbl"),mk("h2",p.username,"dsName"));profBody.append(sub);
+const sub=mk("div","","dsSubj dsInline");sub.append(mk("span","SUBJECT:","dsLbl"),mk("span",p.username,"dsName"));profBody.append(sub);
 const meta=mk("div","","dsMeta");meta.append(mk("div","FILED: "+fmtDate(p.createdAt)),mk("div","STATUS: ACTIVE BUILDER"));profBody.append(meta);
 dsSection("BRIEFING");if(p.bio)profBody.append(mk("p",p.bio,"bio"));else{const r=mk("p","","bio");r.append(redacted(18)," ",redacted(9));profBody.append(r)}
 dsSection("KNOWN CHANNELS");const list=mk("div","","socials");if(socialsInto(list,p))profBody.append(list);else{const r=mk("div","NONE ON FILE ","socials");r.append(redacted(7));profBody.append(r)}
 dsSection("FILED BLUEPRINTS");const bl=mk("div","","builds");bl.append(mk("div","Retrieving records..."));profBody.append(bl);
 userBuilds(p.uid).then(list=>{bl.textContent="";if(!list.length){bl.append(mk("div","NO BLUEPRINTS FILED YET."));return}
 list.forEach(b=>{const r=mk("div","","bRow"),th=mk("div","","wThumb"),go=()=>{profHide();openShared(b._id)};lazyPreview(th,b.d,120,75);th.onclick=go;const info=mk("div","","bInfo"),a=mk("a",b.title||b._id);a.href="#"+b._id;a.onclick=e=>{e.preventDefault();go()};
-info.append(a,mk("div",(b.n||0)+" items, "+fmtN(b.s||0)+" supplies"),mk("div",fmtDate(b.t)+"   likes "+(b.likes||0)));r.append(th,info);bl.append(r)})}).catch(()=>{bl.textContent="RECORDS UNAVAILABLE."});
+info.append(a,mk("div",(b.n||0)+" items, "+fmtN(b.s||0)+" supplies"),mk("div",fmtDate(b.t)+"   "+fmtN(b.views||0)+" views   likes "+(b.likes||0)));r.append(th,info);bl.append(r)})}).catch(()=>{bl.textContent="RECORDS UNAVAILABLE."});
 profBody.append(mk("div","\u2014 END OF FILE \u2014","dsEnd"))}
 async function viewPublicByName(name){dsHead();profBody.append(mk("p","Retrieving file..."));try{const p=await getProfileByName(name);if(p)viewPublic(p);else{dsHead();const r=mk("p","NO RECORD ON FILE FOR THAT CODENAME.","bio");profBody.append(r)}}catch(e){dsHead();profBody.append(mk("p","FILE TEMPORARILY UNAVAILABLE.","bio"))}}
 
 /* ---- read-only shared page, remixing ---- */
 const vbMsg=t=>{$("vbTxt").textContent=t};
-function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
-function renderBuilderCard(d){const c=$("vbBuilder");c.textContent="";if(!d||!d.uid||!d.by){c.hidden=true;return}
-c.style.top=($("viewBar").offsetHeight+8)+"px";c.hidden=false;c.append(mk("div","BUILDER","bcLbl"));const a=mk("a","@"+d.by,"bcName");a.href="#u/"+encodeURIComponent(d.by);a.onclick=e=>{e.preventDefault();viewPublicByName(d.by)};c.append(a);
-const soc=mk("div","","bcSoc");c.append(soc);getProfileByUid(d.uid).then(p=>{if(p&&vmeta&&vmeta.doc===d)socialsInto(soc,p)}).catch(()=>{})}
+function leaveView(){viewOnly=false;vmeta=null;$("viewBar").hidden=true;$("vbAdmin").hidden=true;$("vbBuilder").hidden=true;hist.length=0}
+function renderBuilderCard(d){const c=$("vbBuilder");c.textContent="";c.className="";if(!d||!d.uid||!d.by){c.hidden=true;return}
+const wide=!!(window.matchMedia&&matchMedia("(min-width:900px)").matches);c.style.top=($("viewBar").offsetHeight+8)+"px";c.hidden=false;
+const a=mk("a","@"+d.by,"bcName");a.href="#u/"+encodeURIComponent(d.by);a.onclick=e=>{e.preventDefault();viewPublicByName(d.by)};
+if(!wide){c.append(mk("div","BUILDER","bcLbl"),a);const soc=mk("div","","bcSoc");c.append(soc);getProfileByUid(d.uid).then(p=>{if(p&&vmeta&&vmeta.doc===d)socialsInto(soc,p)}).catch(()=>{});return}
+c.className="full";const hd=mk("div","","bcHd");hd.append(mk("span","SUBJECT: ","bcLbl"),a);c.append(mk("div","CLASSIFIED","bcStamp"),hd);const body=mk("div","Retrieving file...","bcBody");c.append(body);
+getProfileByUid(d.uid).then(p=>{if(!(p&&vmeta&&vmeta.doc===d))return;body.textContent="";if(p.bio){body.append(mk("div","BRIEFING","bcLbl"),mk("p",p.bio,"bio"))}const soc=mk("div","","bcSoc");if(socialsInto(soc,p))body.append(mk("div","KNOWN CHANNELS","bcLbl"),soc);
+if(!p.bio&&!soc.children.length)body.append(mk("p","No details on file."));const full=mk("button","Open full file");full.type="button";full.onclick=()=>viewPublicByName(d.by);body.append(full)}).catch(()=>{body.textContent=""})}
 function enterView(r){if(ed)edDone();setTool(null);boxMode=false;$("bBox").className="";loadItems(r.arr);hist.length=0;viewOnly=true;vmeta={code:r.code,doc:r.doc};autoDirty=false;bpDirty=false;
-$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();renderBuilderCard(r.doc);showBlueprintFile()}
+$("viewBar").hidden=false;vbMsg("VIEW ONLY: "+((r.doc&&r.doc.title)||"Shared blueprint")+(r.doc&&r.doc.by?" by "+r.doc.by:""));wHide();frameAuto();renderShare();ui();renderBuilderCard(r.doc);$("vbAdmin").hidden=!(adminOn&&r.doc&&r.doc.uid);$("vbAdmin").textContent="Delete post (admin)";delete $("vbAdmin").dataset.arm;countView(r.code,r.doc)}
 async function exitView(){leaveView();profHide();const ok=await restoreAuto();if(!ok){items=[];sel=new Set();bpSaved=false;bpDirty=false;bpParent=null;$("bpName").value="";$("bpDesc").value="";rebuild();wShow(false)}autoDirty=false;renderShare();ui()}
 function doRemix(){if(!viewOnly||!vmeta)return;if(authUser&&!profile){openMyProfile();return}
 if(!(authUser&&profile)){vbMsg("Log in to remix this blueprint.");startLogin(vbMsg).then(ok=>{if(ok)vbMsg("Logged in. Press Remix again.")});return}
@@ -1474,7 +1483,8 @@ if(d.uid){dsSection("KNOWN CHANNELS");const bx2=mk("div","Retrieving...","social
 if(vmeta.code){dsSection("SHARE CODE");const cr=mk("div","","socials");cr.append(mk("span",vmeta.code+"  "));const cb=mk("button","Copy");cb.type="button";cb.onclick=async()=>{try{await navigator.clipboard.writeText(vmeta.code);cb.textContent="Copied"}catch(e){cb.textContent=vmeta.code}};cr.append(cb);profBody.append(cr)}
 const row=mk("div","","shRow");row.style.marginTop="12px";const rb=mk("button","Remix this blueprint"),vb=mk("button","View in 3D");rb.type=vb.type="button";rb.onclick=doRemix;vb.onclick=profHide;row.append(rb,vb);profBody.append(row);
 profBody.append(mk("div","\u2014 END OF FILE \u2014","dsEnd"))}
-$("vbInfo").onclick=()=>showBlueprintFile();$("vbRemix").onclick=doRemix;$("vbClose").onclick=exitView;
+$("vbInfo").onclick=()=>showBlueprintFile();
+$("vbAdmin").onclick=async()=>{const b=$("vbAdmin");if(!b.dataset.arm){b.dataset.arm="1";b.textContent="Sure? Press again";return}if(!(adminOn&&vmeta&&vmeta.code))return;try{await fbDb.collection("board").doc(vmeta.code).delete();vbMsg("Post removed from the Intel Board.");b.hidden=true}catch(e){vbMsg("Could not delete. Is this blueprint on the board?");b.textContent="Delete post (admin)";delete b.dataset.arm}};$("vbRemix").onclick=doRemix;$("vbClose").onclick=exitView;
 
 /* ---- Intel Board: public posts with previews, search, likes, and posting ---- */
 const fsDocs=()=>"https://firestore.googleapis.com/v1/projects/"+CLOUD.projectId+"/databases/(default)/documents";
@@ -1488,16 +1498,21 @@ if(s.q){const lo=s.q.toLowerCase(),[a,b]=await Promise.all([fsQuery(prefixQ("tit
 if(s.mode==="liked"){const rows=await fsQuery({from:qFrom,orderBy:[{field:{fieldPath:"likes"},direction:"DESCENDING"}],limit:36});s.done=true;return rows}
 const q={from:qFrom,orderBy:[{field:{fieldPath:"t"},direction:"DESCENDING"}],limit:12};if(s.cursor)q.startAt={values:[{timestampValue:s.cursor}],before:false};
 const rows=await fsQuery(q);if(rows.length<12)s.done=true;if(rows.length)s.cursor=rows[rows.length-1].t;return rows}
+const seenKey=()=>"wd_seen_"+(authUser?authUser.uid:"");
+const seenViews=()=>{try{const a=JSON.parse(localStorage.getItem(seenKey())||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}};
+async function countView(code,doc){if(!code||!cloudOn()||!doc||!doc.uid||!(authUser&&fbDb))return;if(authUser.uid===doc.uid)return;const seen=seenViews();if(seen.includes(code))return;
+try{const pr=fbDb.collection("board").doc(code),vr=pr.collection("views").doc(authUser.uid),b=fbDb.batch();b.set(vr,{t:FVts()});b.update(pr,{views:firebase.firestore.FieldValue.increment(1)});await b.commit()}catch(e){}
+try{seen.push(code);localStorage.setItem(seenKey(),JSON.stringify(seen.slice(-400)))}catch(e){}}
 async function toggleLike(id,liked){const pr=fbDb.collection("board").doc(id),lr=pr.collection("likes").doc(authUser.uid),b=fbDb.batch(),inc=firebase.firestore.FieldValue.increment;
 if(liked){b.delete(lr);b.update(pr,{likes:inc(-1)})}else{b.set(lr,{t:FVts()});b.update(pr,{likes:inc(1)})}await b.commit()}
 function boardCard(p){const c=mk("div","","bCard"),th=mk("div","","bThumb"),open=()=>{boardHide();openShared(p._id)};lazyPreview(th,p.d,240,150);th.onclick=open;c.append(th);
 const t=mk("div",p.title||"Untitled","bTitle");t.onclick=open;c.append(t);
 const by=mk("a","by "+(p.by||"unknown"),"bBy");by.href="#u/"+encodeURIComponent(p.by||"");by.onclick=e=>{e.preventDefault();if(p.by)viewPublicByName(p.by)};c.append(by);
-c.append(mk("div",(p.n||0)+" items  "+fmtN(p.s||0)+" supplies  "+fmtDate(p.t),"bMeta"));
+c.append(mk("div",(p.n||0)+" items  "+fmtN(p.s||0)+" supplies  "+fmtN(p.views||0)+" views  "+fmtDate(p.t),"bMeta"));
 const row=mk("div","","bRowBtns"),lk=mk("button","");lk.type="button";let liked=false;const upd=()=>{lk.textContent=(liked?"LIKED ":"LIKE ")+(p.likes||0);lk.className=liked?"on":""};upd();row.append(lk);
 if(authUser&&profile&&fbDb)fbDb.collection("board").doc(p._id).collection("likes").doc(authUser.uid).get().then(d=>{liked=d.exists;upd()}).catch(()=>{});
 lk.onclick=async()=>{if(!(authUser&&profile)){$("boardMsg").textContent="Log in to like blueprints.";return}lk.disabled=true;try{await toggleLike(p._id,liked);liked=!liked;p.likes=Math.max(0,(p.likes||0)+(liked?1:-1));upd()}catch(e){$("boardMsg").textContent="Could not update your like."}lk.disabled=false};
-if(authUser&&p.uid===authUser.uid){const dl=mk("button","Delete");dl.type="button";dl.onclick=async()=>{if(!dl.dataset.arm){dl.dataset.arm="1";dl.textContent="Sure?";return}try{await fbDb.collection("board").doc(p._id).delete();c.remove()}catch(e){$("boardMsg").textContent="Could not delete that post."}};row.append(dl)}
+if(authUser&&(p.uid===authUser.uid||adminOn)){const dl=mk("button",p.uid===authUser.uid?"Delete":"Delete (admin)");dl.type="button";dl.onclick=async()=>{if(!dl.dataset.arm){dl.dataset.arm="1";dl.textContent="Sure?";return}try{await fbDb.collection("board").doc(p._id).delete();c.remove()}catch(e){$("boardMsg").textContent="Could not delete that post."}};row.append(dl)}
 c.append(row);return c}
 async function boardLoad(reset){const s=bState;if(s.busy)return;s.busy=true;const grid=$("boardGrid"),msg=$("boardMsg");if(reset){grid.textContent="";s.cursor=null;s.done=false;s.shown=new Set()}
 msg.textContent="Loading...";try{const rows=await boardFetch();rows.forEach(p=>{if(!s.shown.has(p._id)){s.shown.add(p._id);grid.append(boardCard(p))}});
@@ -1510,7 +1525,7 @@ const boardSearch=()=>{bState.q=$("boardQ").value.trim();boardLoad(true)};$("boa
 async function postToBoard(title,desc){const long=await shareCode(),sup=Math.round(supCalc().total);
 for(let k=0;k<6;k++){const c=newCode(),bref=fbDb.collection("bps").doc(c);if((await bref.get()).exists)continue;const b=fbDb.batch(),by=profile.username;
 b.set(bref,{d:long,n:items.length,v:1,title,desc,uid:authUser.uid,by,parent:bpParent?bpParent.code:"",parentTitle:bpParent?bpParent.title:"",parentBy:bpParent?bpParent.by:"",t:FVts()});
-b.set(fbDb.collection("board").doc(c),{d:long,n:items.length,s:sup,title,titleLower:title.toLowerCase(),desc,uid:authUser.uid,by,byLower:by.toLowerCase(),t:FVts(),likes:0});await b.commit();return c}throw new Error("busy")}
+b.set(fbDb.collection("board").doc(c),{d:long,n:items.length,s:sup,title,titleLower:title.toLowerCase(),desc,uid:authUser.uid,by,byLower:by.toLowerCase(),t:FVts(),likes:0,views:0});await b.commit();return c}throw new Error("busy")}
 function viewPost(){profShow("INTEL BOARD","SHARE TO THE BOARD");profBody.append(mk("p","This posts a snapshot of your saved blueprint on the Intel Board for everyone to see, with your username and a link to your profile."));
 const pv=mk("div","","dsPrev"),im=mk("img");im.alt="Preview of your base";im.src=isoUrl(items.map(i=>({t:i.t,x:i.x,y:i.y,r:i.r,l:i.l})),400,250);pv.append(im);profBody.append(pv);
 const ti=fld("Title","pbTitle",$("bpName").value.trim().slice(0,60),60),de=fld("Description (optional)","pbDesc",$("bpDesc").value,300,"",true),m=mk("div","","msgline"),row=mk("div","","shRow"),go=mk("button","Post to the board"),no=mk("button","Cancel");go.type=no.type="button";row.append(go,no);profBody.append(m,row);

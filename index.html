@@ -96,7 +96,7 @@ input{font:inherit;font-size:12px;color:var(--ink);background:var(--paper);borde
 #vbBuilder.full{width:400px;max-width:46vw;max-height:calc(50% - 56px);overflow:auto;padding:12px 16px;font-size:15px}.bcStamp{display:inline-block;font-size:15px;font-weight:bold;letter-spacing:4px;color:#a52a2a;border:2px double #a52a2a;padding:0 8px;transform:rotate(-3deg);margin-bottom:4px}
 .bcHd{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:4px}.bcBody{font-size:15px;line-height:1.5;border-top:1px dashed #2a2618;padding-top:5px}.bcBody p{margin:2px 0 6px;white-space:pre-wrap;word-break:break-word}.bcBody .bcLbl{margin-top:6px}.bcBody button{margin-top:10px;background:#2a2618;color:#d9cfae;border-color:#2a2618;padding:6px 12px;min-height:34px;font-size:14px}
 #vbSupply{position:absolute;right:8px;bottom:8px;z-index:5;width:400px;max-width:46vw;max-height:calc(50% - 24px);overflow:auto;background:#d9cfae;color:#2a2618;border:2px solid #6b6139;padding:12px 16px;font-size:15px;line-height:1.5}
-.sHd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid #2a2618;padding-bottom:3px;margin-bottom:4px}.sHd b{font-size:22px}.sTitle{font-size:22px;font-weight:bold;letter-spacing:3px;margin-top:10px}.sHd .sTitle{margin-top:0}
+.sHd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid #2a2618;padding-bottom:3px;margin-bottom:4px}.sHd b{font-size:22px}.sTitle{font-size:22px;font-weight:bold;letter-spacing:3px;margin-top:10px}.sHd .sTitle{margin-top:0}.sUl{display:block;border-bottom:2px solid #2a2618;padding-bottom:3px;margin-bottom:4px}
 .sRow{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dotted #6b6139}.sRow span:first-child{flex:1 1 auto;word-break:break-word}.sRow span:last-child{flex:0 0 auto}.sRow.tot{font-weight:bold;border-bottom:0}
 .sNote{font-size:12px;margin-top:4px}
 .bcLbl{font-size:11px;letter-spacing:3px}.bcName{display:block;font-size:20px;font-weight:bold;letter-spacing:1px;color:#2a2618;word-break:break-all}
@@ -1170,7 +1170,7 @@ const st=add(["Total","","",fmtN(total)]);st.className="sub";L.appendChild(t);
 const n=document.createElement("div");n.style.cssText="color:var(--muted);font-size:11px;margin:-4px 0 8px";n.textContent="Pallet 1,800 supplies, large crate 1,750 (35 slots), small crate 1,200 (24 slots), a slot is 50 supplies.";L.appendChild(n)}
 function supRender(){const c=supCalc(),L=$("supList");L.textContent="";supTable("PLACED ITEMS",c.P,c.sp);
 const g=document.createElement("div");g.className="grand";g.style.marginBottom="10px";const a=document.createElement("span"),b=document.createElement("span");a.textContent="TOTAL SUPPLIES";b.textContent=fmtN(c.total);g.append(a,b);L.appendChild(g);
-if(c.fobs){const p=document.createElement("div");p.className="grand pre";const pa=document.createElement("span"),pb=document.createElement("span");pa.textContent="F.O.B. PRELOADED ("+fmtN(FOB_PRE)+" each)";pb.textContent="-"+fmtN(c.used);p.append(pa,pb);L.appendChild(p);
+if(c.fobs){const p=document.createElement("div");p.className="grand pre";const pa=document.createElement("span"),pb=document.createElement("span");pa.textContent="F.O.B. PRELOADED";pb.textContent="-"+fmtN(c.used);p.append(pa,pb);L.appendChild(p);
 const n2=document.createElement("div");n2.className="grand";n2.style.marginBottom="10px";const na=document.createElement("span"),nb=document.createElement("span");na.textContent="STILL NEEDED";nb.textContent=fmtN(c.need);n2.append(na,nb);L.appendChild(n2)}
 supLogi(L,c.need);}
 function updSupplies(){$("supTot").textContent=fmtN(supCalc().total);if(supOpen)supRender()}
@@ -1470,8 +1470,8 @@ function renderSupplyCard(){const c=$("vbSupply");c.textContent="";const wide=!!
 const sc=supCalc(),row=(a,b,cls)=>{const r=mk("div","","sRow"+(cls?" "+cls:""));r.append(mk("span",a),mk("span",b));return r};
 const hd=mk("div","","sHd");hd.append(mk("span","SUPPLIES","sTitle"),mk("b",fmtN(sc.total)));c.append(hd);
 c.append(mk("div","PLACED ITEMS","bcLbl"));if(!sc.P.length)c.append(mk("div","Nothing placed."));sc.P.forEach(r=>c.append(row(T[r.k].n+" x "+fmtN(r.n),r.c?fmtN(r.n*r.c):"free")));
-if(sc.fobs){c.append(row("F.O.B. preloaded ("+fmtN(FOB_PRE)+" each)","-"+fmtN(sc.used)));c.append(row("Still needed",fmtN(sc.need),"tot"))}
-c.append(mk("div","LOGISTICS","sTitle"));
+if(sc.fobs){c.append(row("F.O.B. preloaded","-"+fmtN(sc.used)));c.append(row("Still needed",fmtN(sc.need),"tot"))}
+c.append(mk("div","LOGISTICS","sTitle sUl"));
 if(sc.need<=0)c.append(mk("div","Nothing needed."));else{const pk=packSupplies(sc.need);pk.rows.filter(r=>r.q>0).forEach(r=>c.append(row(r.n+" x "+fmtN(r.q),fmtN(r.q*r.c))));
 if(pk.loose>0){const sl=Math.ceil(pk.loose/SLOT);c.append(row("Loose, "+sl+(sl===1?" slot":" slots"),fmtN(pk.loose)))}c.append(row("Total",fmtN(sc.need),"tot"));c.append(mk("div","Pallet 1,800, large crate 1,750 (35 slots), small crate 1,200 (24 slots), a slot is 50 supplies.","sNote"))}
 c.hidden=false}
@@ -1638,9 +1638,9 @@ function openSave(){if(viewOnly)return;const acct=!!(authUser&&profile&&fbDb&&cl
 profBody.append(mk("p",acct?(bpPostCode?"Saves to your account and updates your Intel Board post.":"Saves to your account and shares it on the Intel Board."):"Saves on this device. Log in to keep it in your account and share it on the Intel Board."));
 const pv=mk("div","","dsPrev"),im=mk("img");im.alt="Preview of your base";im.src=isoUrl(items.map(i=>({t:i.t,x:i.x,y:i.y,r:i.r,l:i.l})),400,250);pv.append(im);profBody.append(pv);
 const ti=fld("Name","svName",$("bpName").value.trim().slice(0,40),40,"for example Hesco Corner"),de=acct?fld("Description (optional, shown on the Intel Board)","svDesc",$("bpDesc").value,300,"",true):null;
-const m=mk("div","","msgline"),row=mk("div","","shRow"),go=mk("button",acct?"Save and share to Intel Board":"Save"),no=mk("button","Cancel");go.type=no.type="button";row.append(go);
-if(!acct&&authOn()){const lg=mk("button","Log in");lg.type="button";lg.onclick=()=>startLogin(t=>{m.textContent=t});row.append(lg)}row.append(no);profBody.append(m,row);no.onclick=profHide;
-const finish=t=>{m.textContent=t;go.hidden=true;no.textContent="Close"};
+const m=mk("div","","msgline"),row=mk("div","","shRow"),go=mk("button",acct?"Save and share to Intel Board":"Save");go.type="button";row.append(go);
+if(!acct&&authOn()){const lg=mk("button","Log in");lg.type="button";lg.onclick=()=>startLogin(t=>{m.textContent=t});row.append(lg)}profBody.append(m,row);
+const finish=t=>{m.textContent=t;go.hidden=true};
 go.onclick=async()=>{const name=ti.value.trim().slice(0,40);if(!name){m.textContent="Give the blueprint a name first.";return}$("bpName").value=name;if(de)$("bpDesc").value=de.value.trim().slice(0,300);go.disabled=true;m.textContent=acct?"Saving and sharing...":"Saving...";
 try{const r=await saveAndShare();if(!r.saved){m.textContent=$("msg").textContent||"Could not save. Try again.";go.disabled=false;return}
 if(r.local)finish("Saved on this device.");else if(r.shared==="new")finish("Saved and shared to the Intel Board. Share code: "+r.code+".");else if(r.shared==="updated")finish("Saved. Your Intel Board post was updated. Share code: "+r.code+".");
